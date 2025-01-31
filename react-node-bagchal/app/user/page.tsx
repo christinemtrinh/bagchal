@@ -4,11 +4,11 @@ import React, {useEffect,useState} from 'react';
 export default function page() {
   const [data, setData] = useState("")
 
-  //Grabs and sets data to API / Hard code setting data to "test" for now
+  //Grabs and sets data to API 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setData("test")
-    }, 5000)
+    fetch("/api/test")
+      .then((res) => res.json())
+      .then((data) => setData(data.message));
   }, [])
 
   return (
