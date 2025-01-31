@@ -3,10 +3,12 @@ import React, {useEffect,useState} from 'react';
 
 export default function page() {
   const [data, setData] = useState("")
-
+  const res = {
+    json:  {message: "Week 1 complete" }
+   }
   //Grabs and sets data to API 
   useEffect(() => {
-    fetch("/api/test")
+    fetch("http://localhost:3001/api/test")
       .then((res) => res.json())
       .then((data) => setData(data.message));
   }, [])
