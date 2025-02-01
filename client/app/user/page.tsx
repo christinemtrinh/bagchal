@@ -1,4 +1,5 @@
 "use client"
+
 import React, {useEffect,useState} from 'react';
 
 export default function page() {
@@ -8,9 +9,10 @@ export default function page() {
    }
   //Grabs and sets data to API 
   useEffect(() => {
-    fetch("http://localhost:3001/api/test")
+    fetch("/api/test")
       .then((res) => res.json())
       .then((data) => setData(data.message));
+      console.log("here");
   }, [])
 
   return (
