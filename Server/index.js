@@ -1,14 +1,12 @@
 const express = require("express");
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 8080;
 
 const app = express();
 
 
 app.get("/api/test", (req, res) => {
-  res.set ({
-    'Access-Control-Allow-Origin': '*'
-    })
+    console.log("Correct Server")
   res.json({ message: "Week 1 complete" });
 });
 
