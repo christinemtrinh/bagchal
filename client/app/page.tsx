@@ -23,7 +23,8 @@ export default function Home() {
       <div className = "line4"></div>
       <div className = "line5"></div>
       <div className = "rectangle"></div>
-      <button id = "A1" onClick = {() => handleButtonClick("A1")} className = "button" style = {{left: '613px', top: '90px'}}></button>
+      <button id = "A1" onClick = {handleClick} className = "button" style = {{left: '613px', top: '90px'}}></button>
+      {/* <button id = "A1" onClick = {() => handleButtonClick("A1")} className = "button" style = {{left: '613px', top: '90px'}}></button> */}
       <button id = "B1" onClick = {() => handleButtonClick("B1")} className = "button" style = {{left: '294px', top: '270px'}}></button>
       <button id = "B2" onClick = {() => handleButtonClick("B2")} className = "button" style = {{left: '508px', top: '270px'}}></button>
       <button id = "B3" onClick = {() => handleButtonClick("B3")} className = "button" style = {{left: '580px', top: '270px'}}></button>

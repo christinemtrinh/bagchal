@@ -6,6 +6,7 @@ const app = express();
 
 
 app.get("/api/test", (req, res) => {
+
     console.log("Correct Server")
   res.json({ message: "Week 1 complete" });
 });
