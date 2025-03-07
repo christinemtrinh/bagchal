@@ -1,0 +1,74 @@
+
+.board{
+    margin:auto;
+    overflow: auto;
+    width: 100%; /* Adjust as needed */
+    height: 650px; /* Adjust as needed */ 
+    border: 2px solid rgb(213, 213, 213);
+}
+  
+  .rectangle {
+    top: 280px;
+    left: 305px;
+    position: absolute;
+    width: 639px;
+    height: 170px;
+    border: 2px solid rgb(213, 213, 213);
+  }
+
+.line1{
+  position: absolute;
+  left: 625px;
+  top: 100px;
+  border-bottom: 3px solid rgb(213, 213, 213);
+  width: 585px;
+  transform: rotate(60deg);
+  transform-origin: left;
+}
+.line2{
+  position: absolute;
+  left: 337px;
+  top: 600px;
+  border-bottom: 3px solid rgb(213, 213, 213);
+  width: 585px;
+  transform: rotate(-60deg);
+  transform-origin: left;
+}
+.line3{
+  position: absolute;
+  left: 337px;
+  top: 600px;
+  border-bottom: 3px solid rgb(213, 213, 213);
+  width: 585px;
+}
+.line4{
+  position: absolute;
+  left: 625px;
+  top: 100px;
+  border-bottom: 3px solid rgb(213, 213, 213);
+  width: 500px;
+  transform: rotate(80deg);
+  transform-origin: left;
+}
+.line5{
+  position: absolute;
+  left: 625px;
+  top: 100px;
+  border-bottom: 3px solid rgb(213, 213, 213);
+  width: 500px;
+  transform: rotate(100deg);
+  transform-origin: left;
+}
+.button {
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-color:rgb(213, 213, 213);
+  border: 2px solid rgb(118, 118, 118);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
