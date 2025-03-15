@@ -19,8 +19,10 @@ function Spot({buttonID, x, y, value, onSpotClick})
 export default function Home() {
   const [xIsNext, setXIsNext] = useState(true); //State of turn
   const [spots, setSpots] = useState(Array(17).fill(null)) //State or currenet game board
-  const [player, setPlayer] = useState("One"); //State to update player/turn text
+  const [player, setPlayer] = useState("Goat"); //State to update player/turn text
   const router = useRouter()
+  var goatCounter = 0
+  var tempTigerLocation
 
   //Opens page on click
   const handleClickToUser = async () => {    
@@ -37,17 +39,25 @@ export default function Home() {
     }
 
 
-    if(xIsNext) //Turn taking on tic tac toe rules
+    if(!xIsNext) //Turn taking on tic tac toe rules
     {
       //Player One Turn
-      nextSpot[i] = "X" //Set spot to X
-      setPlayer("Two")
+      // tempTigerLocation = i
+      // nextSpot[i] = "" //Set spot to X   TODO: Tried to do tiger movement
+      nextSpot[i] = "X"
+      setPlayer("Goat")
     }
     else
     {
       //Plater Two Turn
-      nextSpot[i] = "O"
-      setPlayer("One")
+      if(goatCounter != 15)
+      {
+        nextSpot[i] = "O"
+        goatCounter = goatCounter + 1
+      }
+
+      setPlayer("Tiger")
+
     }
     setXIsNext(!xIsNext)
     setSpots(nextSpot)
@@ -66,11 +76,11 @@ export default function Home() {
       <div className = "rectangle"></div>
       <h1>Player {player} turn</h1>
       {/* <button id = "A1" onClick = {() =>handleClick(1)} className = "button" style = {{left: '613px', top: '90px'}}></button> */}
-      <Spot buttonID="A1" x="613" y="90" value={spots[0]} onSpotClick= {() => handleClick(0)}/>
+      <Spot buttonID="A1" x="613" y="90" value={spots[0] = "X"} onSpotClick= {() => handleClick(0)}/>
       <Spot buttonID="B1" x="294" y="270" value={spots[1]} onSpotClick={() =>handleClick(1)}/>
       <Spot buttonID="B2" x="508" y="270" value={spots[2]} onSpotClick={() =>handleClick(2)}/>
-      <Spot buttonID="B3" x="580" y="270" value={spots[3]} onSpotClick={() =>handleClick(3)}/>
-      <Spot buttonID="B4" x="644" y="270" value={spots[4]} onSpotClick={() =>handleClick(4)}/>
+      <Spot buttonID="B3" x="580" y="270" value={spots[3] = "X"} onSpotClick={() =>handleClick(3)}/>
+      <Spot buttonID="B4" x="644" y="270" value={spots[4] = "X"} onSpotClick={() =>handleClick(4)}/>
       <Spot buttonID="B5" x="716" y="270" value={spots[5]} onSpotClick={() =>handleClick(5)}/>
       <Spot buttonID="B6" x="930" y="270" value={spots[6]} onSpotClick={() =>handleClick(6)}/>
       <Spot buttonID="C1" x="294" y="435" value={spots[7]} onSpotClick={() =>handleClick(7)}/>
