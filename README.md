@@ -14,6 +14,7 @@ npm start
 # How to open Client
 Travel to Client folder and type 
 ``` 
+npm i
 npm run dev
 ```
 It will look like this after successful run
