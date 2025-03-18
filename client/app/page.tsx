@@ -7,18 +7,22 @@ import { useState } from 'react'
 
 
 //Make buttons reuseable
-function Spot({buttonID, x, y, value, onSpotClick})
-{
-  function onClickPrint()
-  {
-    console.log("Button " + buttonID + " was clicked")
-  }
-  return <button id = {buttonID} onClick = {onSpotClick} className = "button" style = {{left: x + "px", top: y + "px"}}>{value}</button>
+function Spot({ buttonID, value, y, onSpotClick }) {
+  return (
+    <button
+      id={buttonID}
+      onClick={onSpotClick}
+      className="button"
+      style={{left: y + "%"}}
+    >
+      {value}
+    </button>
+  );
 }
 
 export default function Home() {
   const [xIsNext, setXIsNext] = useState(true); //State of turn
-  const [spots, setSpots] = useState(Array(17).fill(null)) //State or currenet game board
+  const [spots, setSpots] = useState(Array(23).fill(null)) //State or currenet game board
   const [player, setPlayer] = useState("Goat"); //State to update player/turn text
   const router = useRouter()
   var goatCounter = 0
@@ -63,37 +67,54 @@ export default function Home() {
     setSpots(nextSpot)
   }
 
-
-  
-
   return (
-    <div className = "board">
-      <div className = "line1"></div>
-      <div className = "line2"></div>
-      <div className = "line3"></div>
-      <div className = "line4"></div>
-      <div className = "line5"></div>
-      <div className = "rectangle"></div>
-      <h1>Player {player} turn</h1>
-      {/* <button id = "A1" onClick = {() =>handleClick(1)} className = "button" style = {{left: '613px', top: '90px'}}></button> */}
-      <Spot buttonID="A1" x="613" y="90" value={spots[0] = "X"} onSpotClick= {() => handleClick(0)}/>
-      <Spot buttonID="B1" x="294" y="270" value={spots[1]} onSpotClick={() =>handleClick(1)}/>
-      <Spot buttonID="B2" x="508" y="270" value={spots[2]} onSpotClick={() =>handleClick(2)}/>
-      <Spot buttonID="B3" x="580" y="270" value={spots[3] = "X"} onSpotClick={() =>handleClick(3)}/>
-      <Spot buttonID="B4" x="644" y="270" value={spots[4] = "X"} onSpotClick={() =>handleClick(4)}/>
-      <Spot buttonID="B5" x="716" y="270" value={spots[5]} onSpotClick={() =>handleClick(5)}/>
-      <Spot buttonID="B6" x="930" y="270" value={spots[6]} onSpotClick={() =>handleClick(6)}/>
-      <Spot buttonID="C1" x="294" y="435" value={spots[7]} onSpotClick={() =>handleClick(7)}/>
-      <Spot buttonID="C2" x="415" y="435" value={spots[8]} onSpotClick={() =>handleClick(8)}/>
-      <Spot buttonID="C3" x="552" y="435" value={spots[9]} onSpotClick={() =>handleClick(9)}/>
-      <Spot buttonID="C4" x="673" y="435" value={spots[10]} onSpotClick={() =>handleClick(10)}/>
-      <Spot buttonID="C5" x="810" y="435" value={spots[11]} onSpotClick={() =>handleClick(11)}/>
-      <Spot buttonID="C6" x="930" y="435" value={spots[12]} onSpotClick={() =>handleClick(12)}/>
-      <Spot buttonID="D1" x="325" y="590" value={spots[13]} onSpotClick={() =>handleClick(13)}/>
-      <Spot buttonID="D2" x="525" y="590" value={spots[14]} onSpotClick={() =>handleClick(14)}/>
-      <Spot buttonID="D3" x="700" y="590" value={spots[15]} onSpotClick={() =>handleClick(15)}/>
-      <Spot buttonID="D4" x="900" y="590" value={spots[16]} onSpotClick={() =>handleClick(16)}/>
+    <div className = "container">
+      <div className = "board">
+        <div className = "line1"></div>
+        <div className = "line2"></div>
+        <div className = "line3"></div>
+        <div className = "line4"></div>
+        <div className = "line5"></div>
+        <div className = "line6"></div>
+        <div className = "rectangle"></div>
+        <div className="button-container">
+          <div className="row" style={{margin: "10%", top: "30%"}}>
+            <Spot buttonID ="A1" value={spots[0] = "X"} y = {0} onSpotClick={() => handleClick(0)} />
+          </div>
+          <div className="row" style={{margin: "20%"}}>
+            <Spot buttonID="B1" value={spots[1]} y={-97} onSpotClick={() => handleClick(1)}/>
+            <Spot buttonID="B2" value={spots[2]} y={-42} onSpotClick={() => handleClick(2)}/>
+            <Spot buttonID="B3" value={spots[3] = "X"} y={-12} onSpotClick={() => handleClick(3)}/>
+            <Spot buttonID="B4" value={spots[4] = "X"} y={13} onSpotClick={() => handleClick(4)}/>
+            <Spot buttonID="B5" value={spots[5]} y={41} onSpotClick={() => handleClick(5)}/>
+            <Spot buttonID="B6" value={spots[6]} y={101} onSpotClick={() => handleClick(6)}/>
+          </div>
+          <div className="row" style={{margin:"-12%"}}>
+            <Spot buttonID="C1" value={spots[7]} y={-97} onSpotClick={() => handleClick(7)}/>
+            <Spot buttonID="C2" value={spots[8]} y={-67} onSpotClick={() => handleClick(8)}/>
+            <Spot buttonID="C3" value={spots[9]} y={-20} onSpotClick={() => handleClick(9)}/>
+            <Spot buttonID="C4" value={spots[10]} y={20} onSpotClick={() => handleClick(10)}/>
+            <Spot buttonID="C5" value={spots[11]} y={66} onSpotClick={() => handleClick(11)}/>
+            <Spot buttonID="C6" value={spots[12]} y={101} onSpotClick={() => handleClick(12)}/>
+          </div>
+          <div className="row" style={{margin: "19%"}}>
+            <Spot buttonID="D1" value={spots[13]} y={-97} onSpotClick={() => handleClick(13)}/>
+            <Spot buttonID="D2" value={spots[14]} y={-90} onSpotClick={() => handleClick(14)}/>
+            <Spot buttonID="D3" value={spots[15]} y={-27} onSpotClick={() => handleClick(15)}/>
+            <Spot buttonID="D4" value={spots[16]} y={27} onSpotClick={() => handleClick(16)}/>
+            <Spot buttonID="D5" value={spots[17]} y={90} onSpotClick={() => handleClick(17)}/>
+            <Spot buttonID="D6" value={spots[18]} y={101} onSpotClick={() => handleClick(18)}/>
+          </div>
+          <div className="row" style={{margin: "-6.5%"}}>
+            <Spot buttonID="E1" value={spots[19]} y={-183} onSpotClick={() => handleClick(19)}/>
+            <Spot buttonID="E2" value={spots[20]} y={-57} onSpotClick={() => handleClick(20)}/>
+            <Spot buttonID="E3" value={spots[21]} y={55} onSpotClick={() => handleClick(21)}/>
+            <Spot buttonID="E4" value={spots[22]} y={183} onSpotClick={() => handleClick(22)}/>
+          </div>
+      </div>
+      </div>
     </div>
+    
   );
 }
 
