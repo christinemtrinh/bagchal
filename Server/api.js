@@ -19,7 +19,7 @@ function moveTiger(board) {}
 function isAnyGoatCaptured(board) {}
 
 // Determine if there is not 15 goats that have been placed yet, place if not yet at 15
-// Input: Location user pick to place goat
+// Input: Location user pick to place goat, also checks if any existing goats or tiger at spot
 // Output: Place Goat
 function placeGoat(board) {}
 
@@ -41,5 +41,10 @@ function isTigerCornered(board){}
 
 // Checks to see remaining goats = 0
 // Input: Num of goats
+// Output: True/False
+function isTigerWin(board){}
+
+// Checks to see if all three tigers are cornered
+// Input: check legal moves for all three tiger, if all false / None
 // Output: True/False
 function isTigerWin(board){}
