@@ -27,7 +27,18 @@ function placeGoat(board) {}
 // Input: Array of integers representing the game board, the index represents the location
 //     0=unoccupied, 1=goat, 2=tiger
 // Output: Dictionary of where each goat may move
-function getGoatLegalMoves(board) {}             
+// Step 3: Add you logic to handle the game
+export function getGoatLegalMoves(inputBody, res) {
+    // Check that inputs look good
+    console.log("req body is " + inputBody);
+
+    // TODO: Add game logic here
+
+    // Pass data back to client to await player move
+    res.json({ possibleMoves: [0, 0, 1, 1, 1, 1, 1, 1, 1, 1] });
+
+
+}             
 
 //Using output given by getGoatLegalMoves, Restrict movement to those spots and get user input to move tiger
 //Input: Tiger to move, Spot to move
@@ -38,11 +49,6 @@ function moveGoat(board) {}
 // Input: Tiger to check
 // Output: True/False
 function isTigerCornered(board){}
-
-// Checks to see remaining goats = 0
-// Input: Num of goats
-// Output: True/False
-function isTigerWin(board){}
 
 // Checks to see if all three tigers are cornered
 // Input: check legal moves for all three tiger, if all false / None
