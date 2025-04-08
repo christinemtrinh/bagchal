@@ -2,13 +2,15 @@ import { useState } from 'react'
 import Modal from "react-modal"
 import './rules.css'
 
-export default function Rules () {
+export default function Rules (props:any) {
     const [showModal, setShowModal] = useState(false);
 
     return (
         <div>
+
         <button className="button2" onClick={() => setShowModal(true)}>Open Rulebook</button>
-        <Modal className="content" isOpen={showModal} ariaHideApp={false}>
+    <h2>{props.player}'s Turn</h2>
+    <Modal className="content" isOpen={showModal} ariaHideApp={false}>
           <button className="button1" onClick={() => setShowModal(false)}>Back to Game </button>
           <h1>Rules for tigers</h1>
           <p>&bull; Can move to any adjacent free position.</p>

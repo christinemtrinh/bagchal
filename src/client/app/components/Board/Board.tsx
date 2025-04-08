@@ -1,13 +1,23 @@
 "use client"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Spot from './Spot/Spot'
+import { GameState } from '../../types/types'
+import httpPostRequest from '../../utilities/httpPostRequest'
 import './board.css'
 
-export default function Board() {
+export default function Board(props:any) {
   const [spots, setSpots] = useState(Array(23).fill(null)) //State or currenet game board
   const [xIsNext, setXIsNext] = useState(true); //State of turn
-  const [player, setPlayer] = useState("Goat"); //State to update player/turn text
-  var goatCounter = 0
+
+
+  useEffect(() => {
+    // Step 1: Tell the server whose turn it is and what the game board looks like right now.
+    httpPostRequest<GameState>('/api/prepareGoatMove', {turn: 'Goat', board: spots})
+      // Step 5: Receive the response and determine what player may do
+      .then(response => console.log(response))
+      .catch(error => console.error('Request failed', error)); 
+  }, [])
+
 
     function handleClick(i:number)
     {
@@ -16,19 +26,14 @@ export default function Board() {
       //If spot is already taken, can't be used
       if(spots[i]) { return }
   
-      //Turn taking on tic tac toe rules
-      if(!xIsNext) {
-        //Player One Turn
+      // Tiger's turn
+      if(props.player == "Tiger") {
         nextSpot[i] = "X"
-        setPlayer("Goat")
+        props.setPlayer("Goat")
       }
       else {
-        //Plater Two Turn
-        if(goatCounter != 15) {
-          nextSpot[i] = "O"
-          goatCounter = goatCounter + 1
-        }
-        setPlayer("Tiger")
+        //Goat Two Turn
+        props.setPlayer("Tiger")
       }
       setXIsNext(!xIsNext)
       setSpots(nextSpot)
@@ -43,7 +48,7 @@ export default function Board() {
       <div className = "line4"></div>
       <div className = "line5"></div>
       <div className = "line6"></div>
-      <div className = "rectangle"></div>
+    <div className = "rectangle"></div>
       <div className="button-container">
         <div className="row" style={{margin: "10%", top: "30%"}}>
           <Spot buttonID ="A1" value={spots[0] = "X"} y = {0} onSpotClick={() => handleClick(0)} />
@@ -80,6 +85,7 @@ export default function Board() {
         </div>
     </div>
     </div>
+
   </div>
     )
 }
