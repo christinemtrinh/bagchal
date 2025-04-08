@@ -110,3 +110,19 @@
   position: relative;
   display: flex;
 }
+
+.button1 {
+  padding: 10px 24px;
+  border-radius: 8px;
+  color: white;
+  border: 2px solid white;
+  width: 100%;
+}
+
+.button2 {
+  padding: 10px 24px;
+  border-radius: 8px;
+  color: white;
+  border: 2px solid white;
+  width: 25%;
+}
