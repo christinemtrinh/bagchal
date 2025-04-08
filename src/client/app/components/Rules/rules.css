@@ -1,0 +1,13 @@
+.content {
+  width: "50%";
+  margin: "auto";
+  background-color: "#000000";
+}
+
+.button1 {
+    padding: 10px 24px;
+    border-radius: 8px;
+    color: white;
+    border: 2px solid white;
+    width: 100%;
+}

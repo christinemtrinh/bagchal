@@ -6,8 +6,9 @@ const app = express();
 
 
 app.get("/api/test", (req, res) => {
-
-    console.log("Correct Server")
+  res.set ({
+    'Access-Control-Allow-Origin': '*'
+    })
   res.json({ message: "Week 1 complete" });
 });
 
