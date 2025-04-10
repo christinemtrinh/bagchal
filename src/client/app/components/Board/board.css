@@ -1,0 +1,120 @@
+.container { 
+  display: flex; /* Use flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  height: 100vh; /* Full viewport height */
+  width: 100vh;
+  margin: auto;
+  border: 1px solid rgb(213, 213, 213);
+}
+
+.board {
+  width: 100%;
+  aspect-ratio: 1 / 1; 
+  border: 1px solid rgb(213, 213, 213);
+  margin: 0 auto; /* Center the board horizontally */ 
+}
+
+.board:after {
+  content: ""; /* Create a pseudo-element */
+  display: block; /* Make it a block element */
+}
+
+.rectangle {
+  position: relative; /* Use absolute positioning */
+  width: 85%; /* Responsive width */
+  height: 25%; /* Responsive height */
+  border: 2px solid rgb(213, 213, 213);
+  top: 50%; /* Position it at the top of the board */
+  left: 8%; /* Center it horizontally */
+}
+
+.line1, .line2, .line3, .line4, .line5, .line6 {
+  position: relative; /* Position lines absolutely */
+  border-bottom: 2px solid rgb(213, 213, 213); /* Line style */
+  width: 90%; /* Responsive width */
+}
+
+.line1 {
+  left: 27.5%; /* Center horizontally */
+  top: 55%; /* Adjust top position */
+  transform: rotate(60deg); /* Rotate line */
+  transform-origin: center; /* Set rotation origin */
+}
+
+.line2 {
+  top: 93.8%; /* Adjust top position */
+  left: 5%; /* Center horizontally */
+  transform: rotate(300deg); /* Rotate line */
+  transform-origin: left; /* Set rotation origin */
+}
+
+.line3 {
+  top: 93.3%; /* Adjust top position */
+  left: 5%; /* Center horizontally */
+  width: 90%; /* Responsive width */
+}
+
+.line6 {
+  top: 63%; /* Adjust top position */
+  left: 8%; /* Center horizontally */
+  width: 85%; /* Responsive width */
+}
+
+.line4 {
+  top: 15%; /* Adjust top position */
+  left: 50%; /* Center horizontally */
+  transform: rotate(80deg); /* Rotate line */
+  transform-origin: left; /* Set rotation origin */
+  width: 79.3%;
+}
+
+.line5 {
+  top: 15%; /* Adjust top position */
+  left: 50%; /* Center horizontally */
+  transform: rotate(100deg); /* Rotate line */
+  transform-origin: left; /* Set rotation origin */
+  width: 79.1%;
+}
+
+
+
+.button {
+  position: relative;
+  height: 5vh;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background-color: rgb(213, 213, 213);
+  border: 2px solid rgb(118, 118, 118);
+  font-size: 3vh;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: rgb(237, 52, 52);
+}
+.button:hover {
+  transform: scale(1.05);
+}
+
+
+.button-container {
+  position: relative;
+  top: -23%;
+  display: flex;
+  flex-direction: column;
+  align-items: center
+}
+
+.row {
+  position: relative;
+  display: flex;
+}
+
+.button2 {
+  padding: 10px 24px;
+  border-radius: 8px;
+  color: white;
+  border: 2px solid white;
+  width: 25%;
+}

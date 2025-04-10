@@ -4,7 +4,10 @@ Node.js: v20.18.1<br />
 npm: 10.8.2
 
 # How to open Server 
-Travel to Server folder and type
+1. Install dependencies
+In bagchal/src run `npm i`
+2. Start the server
+In bagchal/src/server, run 
 ```
 npm start
 ```
@@ -12,7 +15,8 @@ npm start
 
 
 # How to open Client
-Travel to Client folder and type 
+1. Install dependencies then start the service
+In bagchal/src/client, run these two commands
 ``` 
 npm i
 npm run dev
