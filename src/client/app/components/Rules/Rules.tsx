@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import Modal from "react-modal"
 import './rules.css'
+import { ComponentType } from 'react';
+
+
+const ModalSafeForReact18 = Modal as ComponentType<ReactModal['props']>;
 
 export default function Rules (props:any) {
     const [showModal, setShowModal] = useState(false);
@@ -10,7 +14,7 @@ export default function Rules (props:any) {
 
         <button className="button2" onClick={() => setShowModal(true)}>Open Rulebook</button>
     <h2>{props.player}'s Turn</h2>
-    <Modal className="content" isOpen={showModal} ariaHideApp={false}>
+    <ModalSafeForReact18 className="content" isOpen={showModal} ariaHideApp={false}>
           <button className="button1" onClick={() => setShowModal(false)}>Back to Game </button>
           <h1>Rules for tigers</h1>
           <p>&bull; Can move to any adjacent free position.</p>
@@ -24,7 +28,7 @@ export default function Rules (props:any) {
           <p>&bull; Can&apos;t jump over tigers or other goats.</p>
           <p>The game is over when either, all goats are captured by the tigers, or the goats have blocked the tigers from being able to move.</p>
           <p>If there is a stalemate and both players repeat the moves, the game ends in a draw if a particular position is repeated more than twice.</p>
-        </Modal>
+        </ModalSafeForReact18>
         </div>
     )
 }
