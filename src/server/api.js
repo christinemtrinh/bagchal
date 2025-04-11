@@ -28,13 +28,37 @@ function placeGoat(board) {}
 //     0=unoccupied, 1=goat, 2=tiger
 // Output: Dictionary of where each goat may move
 // Step 3: Add you logic to handle the game
+
+let goatCounter = 0;
 export function getGoatLegalMoves(inputBody, res) {
     // Check that inputs look good
-    console.log("req body is " + inputBody);
+    console.log("req body is " + typeof(inputBody));
+
+
+    const parsedBody = JSON.parse(inputBody);
+    const board = parsedBody.board;
+    let possibleMovesArray = [];
+
+
     // TODO: Add game logic here
+    //Gets Goat Legal Places To Move While in Phase One
+    if(goatCounter != 15)
+    {
+        for(let i = 1; i < board.length+1; i++)
+        {
+            if(board[i-1] == null)
+            {
+                possibleMovesArray.push(i)
+            }
+        }
+    }
+    console.log(possibleMovesArray);
+
     
+    //TODO: Get Legal Moves for Goat for Phase 2
+
     // Pass data back to client to await player move
-    res.json({ possibleMoves: [0, 0, 1, 1, 1, 1, 1, 1, 1, 1] });
+    res.json({ possibleMoves: possibleMovesArray });
 
 }             
 
