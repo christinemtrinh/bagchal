@@ -31,12 +31,10 @@ function placeGoat(board) {}
 export function getGoatLegalMoves(inputBody, res) {
     // Check that inputs look good
     console.log("req body is " + inputBody);
-
     // TODO: Add game logic here
-
+    
     // Pass data back to client to await player move
     res.json({ possibleMoves: [0, 0, 1, 1, 1, 1, 1, 1, 1, 1] });
-
 
 }             
 
