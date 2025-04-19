@@ -21,7 +21,9 @@ function isAnyGoatCaptured(board) {}
 // Determine if there is not 15 goats that have been placed yet, place if not yet at 15
 // Input: Location user pick to place goat, also checks if any existing goats or tiger at spot
 // Output: Place Goat
-function placeGoat(board) {}
+function placeGoat(legalSpots) {
+    
+}
 
 // Determine where a goat may move
 // Input: Array of integers representing the game board, the index represents the location
@@ -32,13 +34,13 @@ function placeGoat(board) {}
 let goatCounter = 0;
 export function getGoatLegalMoves(inputBody, res) {
     // Check that inputs look good
-    console.log("req body is " + typeof(inputBody));
+    const inputBodyString = JSON.stringify(inputBody);
+    console.log("req body is " + inputBodyString);
 
 
-    const parsedBody = JSON.parse(inputBody);
-    const board = parsedBody.board;
+    const board = inputBody.board;
+    console.log(board)
     let possibleMovesArray = [];
-
 
     // TODO: Add game logic here
     //Gets Goat Legal Places To Move While in Phase One
@@ -48,16 +50,20 @@ export function getGoatLegalMoves(inputBody, res) {
         {
             if(board[i-1] == null)
             {
-                possibleMovesArray.push(i)
+                possibleMovesArray.push(false)
+            }
+            else
+            {
+                possibleMovesArray.push(true)
             }
         }
+        goatCounter++;
     }
-    console.log(possibleMovesArray);
 
-    
     //TODO: Get Legal Moves for Goat for Phase 2
 
     // Pass data back to client to await player move
+    console.log(possibleMovesArray)
     res.json({ possibleMoves: possibleMovesArray });
 
 }             

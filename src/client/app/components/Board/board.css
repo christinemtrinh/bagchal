@@ -92,9 +92,15 @@
   justify-content: center;
   text-align: center;
   color: rgb(237, 52, 52);
+  
 }
 .button:hover {
   transform: scale(1.05);
+}
+button:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
 }
 
 
