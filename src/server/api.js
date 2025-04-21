@@ -42,7 +42,6 @@ export function getGoatLegalMoves(inputBody, res) {
     console.log(board)
     let possibleMovesArray = [];
 
-    // TODO: Add game logic here
     //Gets Goat Legal Places To Move While in Phase One
     if(goatCounter != 15)
     {
