@@ -92,6 +92,9 @@ export default function Board(props: any) {
   return (
     <div className="container">
       <div className="board">
+        <div className="turn">
+          <p>{props.player ? 'Goat' : 'Tiger'}'s turn</p>
+        </div>
         <div className="line1"></div>
         <div className="line2"></div>
         <div className="line3"></div>

@@ -11,13 +11,19 @@
 .board {
   width: 100%;
   aspect-ratio: 1 / 1; 
-  border: 1px solid rgb(213, 213, 213);
+  border: 1px solid rgb(0, 0, 0);
   margin: 0 auto; /* Center the board horizontally */ 
 }
 
 .board:after {
   content: ""; /* Create a pseudo-element */
   display: block; /* Make it a block element */
+}
+
+.turn {
+  display: flex;
+  justify-content: center; 
+  align-items: center;   
 }
 
 .rectangle {

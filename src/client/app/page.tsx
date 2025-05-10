@@ -21,8 +21,9 @@ export default function Home() {
   return (
     <div>
       <Rules player={player}/>
-      <Board setPlayer={changePlayer} player = {player}/>
-      
+      <div style={{position: "relative", top: "55px"}}>
+        <Board setPlayer={changePlayer} player = {player}/>
+      </div>
   </div>
   );
 }
