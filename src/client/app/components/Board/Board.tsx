@@ -88,19 +88,19 @@ export default function Board(props: any) {
   }
 
   //find legal spots to move tiger
-  function callGetTigerLegalMoves(board, selectedTiger) {
-    httpPostRequest<GameState>("/api/getTigerLegalMoves", {
-      turn: "Tiger",
-      board: board,
-      piece: selectedTiger,
-    })
-      // Step 5: Receive the response and determine what player may do
-      .then((response) => {
-        updateDisabledSpots(response.possibleMoves);
-        console.log(response);
-      })
-      .catch((error) => console.error("Request failed", error));
-  }
+  // function callGetTigerLegalMoves(board, selectedTiger) {
+  //   httpPostRequest<GameState>("/api/getTigerLegalMoves", {
+  //     turn: "Tiger",
+  //     board: board,
+  //     piece: selectedTiger,
+  //   })
+  //     // Step 5: Receive the response and determine what player may do
+  //     .then((response) => {
+  //       updateDisabledSpots(response.possibleMoves);
+  //       console.log(response);
+  //     })
+  //     .catch((error) => console.error("Request failed", error));
+  // }
 
   //Handle Button Clicks
   function handleClick(row: number, col: number) {
