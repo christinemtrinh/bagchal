@@ -44,6 +44,7 @@ export default function Board(props: any) {
       .catch((error) => console.error("Request failed", error));
   }, []);
 
+  //Find places to place goat
   function callGoatLegalMovesPhaseOne(board) {
     httpPostRequest<GameState>("/api/prepareGoatMovePhaseOne", {
       turn: "Goat",
@@ -57,11 +58,41 @@ export default function Board(props: any) {
       .catch((error) => console.error("Request failed", error));
   }
 
+  //select goat
+  function callFindGoat(board) {
+    httpPostRequest<GameState>("/api/selectGoat", {
+      turn: "Goat",
+      board: board,
+    })
+      // Step 5: Receive the response and determine what player may do
+      .then((response) => {
+        updateDisabledSpots(response.possibleMoves);
+        console.log(response);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+
+
   //select tiger
   function callFindTiger(board) {
-    httpPostRequest<GameState>("/api/prepareTigerMove", {
+    httpPostRequest<GameState>("/api/selectTiger", {
       turn: "Tiger",
       board: board,
+    })
+      // Step 5: Receive the response and determine what player may do
+      .then((response) => {
+        updateDisabledSpots(response.possibleMoves);
+        console.log(response);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+
+  //find legal spots to move tiger
+  function callGetTigerLegalMoves(board, selectedTiger) {
+    httpPostRequest<GameState>("/api/getTigerLegalMoves", {
+      turn: "Tiger",
+      board: board,
+      piece: selectedTiger,
     })
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
@@ -82,12 +113,21 @@ export default function Board(props: any) {
       {
         setSelectedPiece({row, col})
         setPieceSelected(true)
+        callGetTigerLegalMoves(nextSpot)
       }
       //select where to move
+      //will need to check if same spot is clicked again to deselect and go back
       else
       {
         setSpots(nextSpot);
-        callGoatLegalMovesPhaseOne(nextSpot);
+        if(goatCounter <= 15)
+        {
+          callGoatLegalMovesPhaseOne(nextSpot);
+        }
+        else
+        {
+          callFindGoat(nextSpot)
+        }
         setPieceSelected(false)
         props.setPlayer(props.player);
       }

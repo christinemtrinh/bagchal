@@ -13,10 +13,6 @@ let possibleMovesArray = [
     [false, false, false, false, false, false],
     [false, false, false, false]
   ];
-function getTigerSelected(board)
-{
-
-}
 
 //finds spots with tigers
 export function findTiger(inputBody, res) {
@@ -34,25 +30,41 @@ export function findTiger(inputBody, res) {
       }
     }
   }
-  //TinpDO: Get Legal Moves for Goat for Phase 2
-  // Pass data back to client to await player move
   console.log(possibleMovesArray);
   res.json({ possibleMoves: possibleMovesArray });
 }
-//Using output given by getTigerLegalMoves, Restrict selectement to those spots and get user input to move tiger
-//Input: Tiger to move, Spot to move
-//Output: Final location, initial location
-function moveTiger(board) {}
 
+//finds spots with goats
+export function findGoat(inputBody, res) {
+    // Check that inputs look good
+    const inputBodyString = JSON.stringify(inputBody);
+    const board = inputBody.board;
+    for (let i = 0; i < board.length; i++) {
+      for (let j = 0; j < board[i].length; j++) {
+        if (board[i][j] == 'G') {
+          possibleMovesArray[i][j] = false;
+        }
+        else
+        {
+          possibleMovesArray[i][j] = true;
+        }
+      }
+    }
+    //TODO: Get Legal Moves for Goat for Phase 2
+    // Pass data back to client to await player move
+    console.log(possibleMovesArray);
+    res.json({ possibleMoves: possibleMovesArray });
+  }
+
+export function getTigerLegalMoves(inputBody, res) {
+    const board = inputBody.board;
+    
+}
 // Determine if a goat has been captured, using the previous state
 // Input: Array of integers representing the game board, the index is the location
 // Output: Array of integers representing the game board, with the goat removed, if applicable
 function isAnyGoatCaptured(board) {}
 
-// Determine if there is not 15 goats that have been placed yet, place if not yet at 15
-// Input: Location user pick to place goat, also checks if any existing goats or tiger at spot
-// Output: Place Goat
-function placeGoat(legalSpots) {}
 
 // Determine where a goat may move
 // Input: Array of integers representing the game board, the index represents the location
