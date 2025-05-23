@@ -91,7 +91,7 @@ export function findGoat(inputBody, res) {
 
 export function getTigerLegalMoves(inputBody, res) {
     const board = inputBody.board;
-    
+    console.log(inputBody)
 }
 // Determine if a goat has been captured, using the previous state
 // Input: Array of integers representing the game board, the index is the location
