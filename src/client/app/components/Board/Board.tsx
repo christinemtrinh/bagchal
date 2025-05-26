@@ -5,11 +5,12 @@ import { GameState } from "../../types/types";
 import { piece } from "../../types/types";
 import httpPostRequest from "../../utilities/httpPostRequest";
 import "./board.css";
+import next from "next";
 
 export default function Board(props: any) {
   const [spots, setSpots] = useState([
-    [""],
-    ["", "", "", "", "", ""],
+    ["T"],
+    ["", "", "T", "T", "", ""],
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""],
     ["", "", "", ""],
@@ -22,11 +23,11 @@ export default function Board(props: any) {
     [false, false, false, false]
   ]);
   const [goatCounter, setGoatCounter] = useState(0);
-  const [selectedPiece, setSelectedPiece] = useState({row: 0, col: 0});
+  const [selectedPiece, setSelectedPiece] = useState({ row: -1, col: -1 });
   const [pieceSelected, setPieceSelected] = useState(false);
   //Set useState to set Button to Disabled/Enabled
   const updateDisabledSpots = (locations) => {
-    console.log(locations);
+
     setDisabledSpots(locations);
   };
 
@@ -40,7 +41,6 @@ export default function Board(props: any) {
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
         updateDisabledSpots(response.possibleMoves);
-        console.log(response);
       })
       .catch((error) => console.error("Request failed", error));
   }, []);
@@ -54,7 +54,6 @@ export default function Board(props: any) {
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
         updateDisabledSpots(response.possibleMoves);
-        console.log(response);
       })
       .catch((error) => console.error("Request failed", error));
   }
@@ -68,7 +67,6 @@ export default function Board(props: any) {
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
         updateDisabledSpots(response.possibleMoves);
-        console.log(response);
       })
       .catch((error) => console.error("Request failed", error));
   }
@@ -82,8 +80,7 @@ export default function Board(props: any) {
     })
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
-        updateDisabledSpots(response.possibleMoves);
-        console.log(response);
+        updateDisabledSpots(response.possibleMoves);;
       })
       .catch((error) => console.error("Request failed", error));
   }
@@ -97,14 +94,26 @@ export default function Board(props: any) {
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
         updateDisabledSpots(response.possibleMoves);
-        console.log(response);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+
+  function callGetGoatLegalMovesPhaseTwo(board, selectedGoat) {
+    httpPostRequest<piece>("/api/getTigerLegalMoves", {
+      board: board,
+      index: selectedGoat,
+    })
+      // Step 5: Receive the response and determine what player may do
+      .then((response) => {
+        updateDisabledSpots(response.possibleMoves);
       })
       .catch((error) => console.error("Request failed", error));
   }
 
   //Handle Button Clicks
   function handleClick(row: number, col: number) {
-    const nextSpot = spots.slice();
+    const nextSpot = spots.map(row => [...row]);
+    let updatedBoard;
     // Tiger's turn will have to handle two clicks
     if (!props.player) 
     {
@@ -113,22 +122,61 @@ export default function Board(props: any) {
       {
         setSelectedPiece({row, col})
         setPieceSelected(true)
-        callGetTigerLegalMoves(nextSpot, [selectedPiece.row, selectedPiece.col])
+        callGetTigerLegalMoves(nextSpot, [row, col])
       }
       //select where to move
       //will need to check if same spot is clicked again to deselect and go back
       else
       {
-        setSpots(nextSpot);
-        if(goatCounter <= 15)
+ 
+        //checks if same piece was clicked (maybe add feature to deselect piece)
+        if(selectedPiece.row == row && selectedPiece.col == col)
         {
-          callGoatLegalMovesPhaseOne(nextSpot);
+          console.log("same piece")
         }
         else
         {
-          callFindGoat(nextSpot)
+
+          // Create updated board after tiger has moved
+          // Map through old board (nextSpot), row by row
+          updatedBoard = nextSpot.map((rowMap, rowIndexMap) => {
+            // Check if we are at T0
+            if (rowIndexMap === selectedPiece.row) {
+              // New board should clear this spot
+              return [
+              ...rowMap.slice(0,selectedPiece.col),
+              "",
+              ...rowMap.slice(selectedPiece.col + 1, rowMap.length)
+              ]
+              // clear the old Tiger position
+              // Check if we are at T1
+            } else if (rowIndexMap === row) {
+              // move Tiger to new position
+              return [
+                ...rowMap.slice(0,col),
+                "T",
+                ...rowMap.slice(col + 1, rowMap.length)
+                ]
+            } else {
+              return rowMap; // leave the rest unchanged
+            }
+          }
+          );
+          setPieceSelected(false)
+          setSelectedPiece({ row: -1, col: -1 });
+          setSpots(updatedBoard)
         }
-        setPieceSelected(false)
+
+        //checks to see if phase one of goats is done
+        if(goatCounter <= 15)
+        {
+          callGoatLegalMovesPhaseOne(updatedBoard);
+        }
+        else
+        {
+          callFindGoat(updatedBoard)
+        }
+
         props.setPlayer(props.player);
       }
 
@@ -150,12 +198,47 @@ export default function Board(props: any) {
       {
         setSelectedPiece({row, col})
         setPieceSelected(true)
+        callGetGoatLegalMovesPhaseTwo(nextSpot, [row, col])
       }
       //select where to move
       else
       {
-        callFindTiger(nextSpot);
-        setPieceSelected(false)
+        if(selectedPiece.row == row && selectedPiece.col == col)
+          {
+            console.log("same piece")
+          }
+          else
+          {
+            // Create updated board after tiger has moved
+            // Map through old board (nextSpot), row by row
+            updatedBoard = nextSpot.map((rowMap, rowIndexMap) => {
+              // Check if we are at T0
+              if (rowIndexMap === selectedPiece.row) {
+                // New board should clear this spot
+                return [
+                ...rowMap.slice(0,selectedPiece.col),
+                "",
+                ...rowMap.slice(selectedPiece.col + 1, rowMap.length)
+                ]
+                // clear the old Goat position
+                // Check if we are at T1
+              } else if (rowIndexMap === row) {
+                // move Tiger to new position
+                return [
+                  ...rowMap.slice(0,col),
+                  "T",
+                  ...rowMap.slice(col + 1, rowMap.length)
+                  ]
+              } else {
+                return rowMap; // leave the rest unchanged
+              }
+            }
+            );
+            setPieceSelected(false)
+            setSelectedPiece({ row: -1, col: -1 });
+            setSpots(updatedBoard)
+            callFindTiger(updatedBoard);
+          }
         props.setPlayer(props.player);
         
       }
@@ -180,7 +263,7 @@ export default function Board(props: any) {
             <Spot
               buttonID="1"
               disabled={disabledSpots[0][0]}
-              value={(spots[0][0] = "T")}
+              value={(spots[0][0])}
               y={0}
               onSpotClick={() => handleClick(0, 0)}
             />
@@ -203,14 +286,14 @@ export default function Board(props: any) {
             <Spot
               buttonID="4"
               disabled={disabledSpots[1][2]}
-              value={(spots[1][2] = "T")}
+              value={(spots[1][2])}
               y={-12}
               onSpotClick={() => handleClick(1,2)}
             />
             <Spot
               buttonID="5"
               disabled={disabledSpots[1][3]}
-              value={(spots[1][3] = "T")}
+              value={(spots[1][3])}
               y={13}
               onSpotClick={() => handleClick(1,3)}
             />

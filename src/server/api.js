@@ -16,9 +16,9 @@ let possibleMovesArray = [
 
 let graphDict = 
 {
-  '[0 , 0]': [[1,1],[1,2],[1,3],[1,4]],
-  '[1 , 0]': [[1,1],[2,0]],
-  '[1 , 1]': [[0,0],[1,0],[1,2],[2,1]],
+  '[0,0]': [[1,1],[1,2],[1,3],[1,4]],
+  '[1,0]': [[1,1],[2,0]],
+  '[1,1]': [[0,0],[1,0],[1,2],[2,1]],
   '[1,2]': [[0,0], [1,1], [1,3],[2,2]],
   '[1,3]': [[0,0],[1,4],[1,2],[2,3]],
   '[1,4]': [[0,0],[1,3],[1,5],[2,4]],
@@ -63,7 +63,6 @@ export function findTiger(inputBody, res) {
       }
     }
   }
-  console.log(possibleMovesArray);
   res.json({ possibleMoves: possibleMovesArray });
 }
 
@@ -85,13 +84,32 @@ export function findGoat(inputBody, res) {
     }
     //TODO: Get Legal Moves for Goat for Phase 2
     // Pass data back to client to await player move
-    console.log(possibleMovesArray);
     res.json({ possibleMoves: possibleMovesArray });
   }
 
 export function getTigerLegalMoves(inputBody, res) {
     const board = inputBody.board;
-    console.log(inputBody)
+    const moves = bfs(JSON.stringify(inputBody.index)) 
+    const moveArrayCopy =  possibleMovesArray.map(row => [...row])
+    for (let i = 0; i < moves.length; i++)
+    {
+      //add capture logic
+      if(board[moves[i][0]][moves[i][1]] == 'G')
+      {
+        moveArrayCopy[moves[i][0]][moves[i][1]] = true;
+      }
+      else if(board[moves[i][0]][moves[i][1]] == '')
+      {
+        moveArrayCopy[moves[i][0]][moves[i][1]] = false;
+      }
+      else
+      {
+        moveArrayCopy[moves[i][0]][moves[i][1]] = true;
+      }
+
+
+    }
+    res.json({ possibleMoves: moveArrayCopy });
 }
 // Determine if a goat has been captured, using the previous state
 // Input: Array of integers representing the game board, the index is the location
@@ -109,8 +127,6 @@ function isAnyGoatCaptured(board) {}
 
 export function getGoatLegalMovesPhaseOne(inputBody, res) {
   // Check that inputs look good
-  const inputBodyString = JSON.stringify(inputBody);
-
   const board = inputBody.board;
 
   //Gets Goat Legal Places To Move While in Phase One
@@ -125,10 +141,33 @@ export function getGoatLegalMovesPhaseOne(inputBody, res) {
       }
     }
   }
-  console.log(possibleMovesArray);
   res.json({ possibleMoves: possibleMovesArray });
 }
 
+export function getGoatLegalMovesPhaseTwo(inputBody, res) {
+  const board = inputBody.board;
+  const moves = bfs(JSON.stringify(inputBody.index)) 
+  const moveArrayCopy =  possibleMovesArray.map(row => [...row])
+  for (let i = 0; i < moves.length; i++)
+  {
+    //maybe add corner tiger check?
+    if(board[moves[i][0]][moves[i][1]] == 'T')
+    {
+      moveArrayCopy[moves[i][0]][moves[i][1]] = true;
+    }
+    else if(board[moves[i][0]][moves[i][1]] == '')
+    {
+      moveArrayCopy[moves[i][0]][moves[i][1]] = false;
+    }
+    else
+    {
+      moveArrayCopy[moves[i][0]][moves[i][1]] = true;
+    }
+
+
+  }
+  res.json({ possibleMoves: moveArrayCopy });
+}
 //Using output given by getGoatLegalMoves, Restrict movement to those spots and get user input to move tiger
 //Input: Tiger to move, Spot to move
 //Output: Final location, initial location

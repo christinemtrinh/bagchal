@@ -18,6 +18,7 @@ app.post("/api/prepareGoatMovePhaseOne", (req, res) => api.getGoatLegalMovesPhas
 app.post("/api/selectGoat", (req, res) => api.findGoat((req.body), res));
 app.post("/api/selectTiger", (req, res) => api.findTiger((req.body), res));
 app.post("/api/getTigerLegalMoves", (req, res) => api.getTigerLegalMoves((req.body), res));
+app.post("/api/getGoatLegalMovesPhaseTwo", (req, res) => api.getGoatLegalMovesPhaseTwo((req.body), res));
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
