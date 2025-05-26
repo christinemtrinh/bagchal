@@ -141,7 +141,36 @@ export default function Board(props: any) {
           // Map through old board (nextSpot), row by row
           updatedBoard = nextSpot.map((rowMap, rowIndexMap) => {
             // Check if we are at T0
-            if (rowIndexMap === selectedPiece.row) {
+            if(row === selectedPiece.row && row === rowIndexMap) {
+              if (selectedPiece.col > col)
+              {
+                return[
+                  ...rowMap.slice(0, col),
+                  "T",
+                  ...rowMap.slice(col + 1, selectedPiece.col),
+                  "",
+                  ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
+                ]
+              }
+              else{
+                return[
+                  ...rowMap.slice(0, selectedPiece.col),
+                  "",
+                  ...rowMap.slice(selectedPiece.col + 1, col),
+                  "T",
+                  ...rowMap.slice(col + 1, rowMap.length),
+                ]
+              }
+            }
+            else if (rowIndexMap === row) {
+              // move Tiger to new position
+              return [
+                ...rowMap.slice(0,col),
+                "T",
+                ...rowMap.slice(col + 1, rowMap.length)
+                ]
+            }
+            else if (rowIndexMap === selectedPiece.row) {
               // New board should clear this spot
               return [
               ...rowMap.slice(0,selectedPiece.col),
@@ -150,25 +179,19 @@ export default function Board(props: any) {
               ]
               // clear the old Tiger position
               // Check if we are at T1
-            } else if (rowIndexMap === row) {
-              // move Tiger to new position
-              return [
-                ...rowMap.slice(0,col),
-                "T",
-                ...rowMap.slice(col + 1, rowMap.length)
-                ]
-            } else {
+            }  else {
               return rowMap; // leave the rest unchanged
             }
           }
           );
+          console.log(updatedBoard)
           setPieceSelected(false)
           setSelectedPiece({ row: -1, col: -1 });
           setSpots(updatedBoard)
         }
 
         //checks to see if phase one of goats is done
-        if(goatCounter <= 15)
+        if(goatCounter < 15)
         {
           callGoatLegalMovesPhaseOne(updatedBoard);
         }
@@ -185,7 +208,7 @@ export default function Board(props: any) {
     else if (props.player) 
     {
       //place goat
-      if (goatCounter <= 15) 
+      if (goatCounter < 15) 
       {
         nextSpot[row][col] = "G";
         setSpots(nextSpot);
@@ -213,23 +236,45 @@ export default function Board(props: any) {
             // Map through old board (nextSpot), row by row
             updatedBoard = nextSpot.map((rowMap, rowIndexMap) => {
               // Check if we are at T0
-              if (rowIndexMap === selectedPiece.row) {
+              if(row === selectedPiece.row && row === rowIndexMap) {
+                if (selectedPiece.col > col)
+                {
+                  return[
+                    ...rowMap.slice(0, col),
+                    "G",
+                    ...rowMap.slice(col + 1, selectedPiece.col),
+                    "",
+                    ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
+                  ]
+                }
+                else{
+                  return[
+                    ...rowMap.slice(0, selectedPiece.col),
+                    "",
+                    ...rowMap.slice(selectedPiece.col + 1, col),
+                    "G",
+                    ...rowMap.slice(col + 1, rowMap.length),
+                  ]
+                }
+              }
+              else if (rowIndexMap === row) {
+                // move Tiger to new position
+                return [
+                  ...rowMap.slice(0,col),
+                  "G",
+                  ...rowMap.slice(col + 1, rowMap.length)
+                  ]
+              }
+              else if (rowIndexMap === selectedPiece.row) {
                 // New board should clear this spot
                 return [
                 ...rowMap.slice(0,selectedPiece.col),
                 "",
                 ...rowMap.slice(selectedPiece.col + 1, rowMap.length)
                 ]
-                // clear the old Goat position
+                // clear the old Tiger position
                 // Check if we are at T1
-              } else if (rowIndexMap === row) {
-                // move Tiger to new position
-                return [
-                  ...rowMap.slice(0,col),
-                  "T",
-                  ...rowMap.slice(col + 1, rowMap.length)
-                  ]
-              } else {
+              }  else {
                 return rowMap; // leave the rest unchanged
               }
             }

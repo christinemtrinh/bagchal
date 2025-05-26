@@ -7,43 +7,141 @@
 //       5: [4, 9]
 //     }
 let possibleMovesArray = [
-    [true],
-    [false, false, true, true, false, false],
-    [false, false, false, false, false, false],
-    [false, false, false, false, false, false],
-    [false, false, false, false]
-  ];
+  [true],
+  [false, false, true, true, false, false],
+  [false, false, false, false, false, false],
+  [false, false, false, false, false, false],
+  [false, false, false, false],
+];
 
-let graphDict = 
-{
-  '[0,0]': [[1,1],[1,2],[1,3],[1,4]],
-  '[1,0]': [[1,1],[2,0]],
-  '[1,1]': [[0,0],[1,0],[1,2],[2,1]],
-  '[1,2]': [[0,0], [1,1], [1,3],[2,2]],
-  '[1,3]': [[0,0],[1,4],[1,2],[2,3]],
-  '[1,4]': [[0,0],[1,3],[1,5],[2,4]],
-  '[1,5]': [[1,4],[2,5]],
-  '[2,0]': [[2,1],[3,0],[1,0]],
-  '[2,1]': [[1,1],[2,0],[2,2],[3,1]],
-  '[2,2]': [[1,2], [2,1], [2,3],[3,2]],
-  '[2,3]': [[1,3],[2,4],[2,2],[3,3]],
-  '[2,4]': [[1,4],[2,3],[2,5],[3,4]],
-  '[2,5]': [[2,4],[3,5],[1,5]],
-  '[3,0]': [[3,1],[2,0]],
-  '[3,1]': [[2,1],[3,0],[3,2],[4,0]],
-  '[3,2]': [[2,2], [3,1], [3,3],[4,1]],
-  '[3,3]': [[2,3],[3,4],[3,2],[4,2]],
-  '[3,4]': [[2,4],[3,3],[3,5],[4,3]],
-  '[3,5]': [[3,4],[2,5]],
-  '[4,0]': [[3,1],[4,1]],
-  '[4,1]': [[4,0],[4,2],[3,2]],
-  '[4,2]': [[4,1],[4,3],[3,3]],
-  '[4,3]': [[3,4],[4,2]]
-}
+let graphDict = {
+  "[0,0]": [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+    [1, 4],
+  ],
+  "[1,0]": [
+    [1, 1],
+    [2, 0],
+  ],
+  "[1,1]": [
+    [0, 0],
+    [1, 0],
+    [1, 2],
+    [2, 1],
+  ],
+  "[1,2]": [
+    [0, 0],
+    [1, 1],
+    [1, 3],
+    [2, 2],
+  ],
+  "[1,3]": [
+    [0, 0],
+    [1, 4],
+    [1, 2],
+    [2, 3],
+  ],
+  "[1,4]": [
+    [0, 0],
+    [1, 3],
+    [1, 5],
+    [2, 4],
+  ],
+  "[1,5]": [
+    [1, 4],
+    [2, 5],
+  ],
+  "[2,0]": [
+    [2, 1],
+    [3, 0],
+    [1, 0],
+  ],
+  "[2,1]": [
+    [1, 1],
+    [2, 0],
+    [2, 2],
+    [3, 1],
+  ],
+  "[2,2]": [
+    [1, 2],
+    [2, 1],
+    [2, 3],
+    [3, 2],
+  ],
+  "[2,3]": [
+    [1, 3],
+    [2, 4],
+    [2, 2],
+    [3, 3],
+  ],
+  "[2,4]": [
+    [1, 4],
+    [2, 3],
+    [2, 5],
+    [3, 4],
+  ],
+  "[2,5]": [
+    [2, 4],
+    [3, 5],
+    [1, 5],
+  ],
+  "[3,0]": [
+    [3, 1],
+    [2, 0],
+  ],
+  "[3,1]": [
+    [2, 1],
+    [3, 0],
+    [3, 2],
+    [4, 0],
+  ],
+  "[3,2]": [
+    [2, 2],
+    [3, 1],
+    [3, 3],
+    [4, 1],
+  ],
+  "[3,3]": [
+    [2, 3],
+    [3, 4],
+    [3, 2],
+    [4, 2],
+  ],
+  "[3,4]": [
+    [2, 4],
+    [3, 3],
+    [3, 5],
+    [4, 3],
+  ],
+  "[3,5]": [
+    [3, 4],
+    [2, 5],
+  ],
+  "[4,0]": [
+    [3, 1],
+    [4, 1],
+  ],
+  "[4,1]": [
+    [4, 0],
+    [4, 2],
+    [3, 2],
+  ],
+  "[4,2]": [
+    [4, 1],
+    [4, 3],
+    [3, 3],
+  ],
+  "[4,3]": [
+    [3, 4],
+    [4, 2],
+  ],
+};
 
 export function bfs(index) {
-  if(graphDict[index]) {
-    return graphDict[index]
+  if (graphDict[index]) {
+    return graphDict[index];
   }
 }
 
@@ -54,11 +152,9 @@ export function findTiger(inputBody, res) {
   const board = inputBody.board;
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j] == 'T') {
+      if (board[i][j] == "T") {
         possibleMovesArray[i][j] = false;
-      }
-      else
-      {
+      } else {
         possibleMovesArray[i][j] = true;
       }
     }
@@ -68,62 +164,55 @@ export function findTiger(inputBody, res) {
 
 //finds spots with goats
 export function findGoat(inputBody, res) {
-    // Check that inputs look good
-    const inputBodyString = JSON.stringify(inputBody);
-    const board = inputBody.board;
-    for (let i = 0; i < board.length; i++) {
-      for (let j = 0; j < board[i].length; j++) {
-        if (board[i][j] == 'G') {
-          possibleMovesArray[i][j] = false;
-        }
-        else
-        {
-          possibleMovesArray[i][j] = true;
-        }
+  // Check that inputs look good
+  const inputBodyString = JSON.stringify(inputBody);
+  const board = inputBody.board;
+  for (let i = 0; i < board.length; i++) {
+    for (let j = 0; j < board[i].length; j++) {
+      if (board[i][j] == "G") {
+        possibleMovesArray[i][j] = false;
+      } else {
+        possibleMovesArray[i][j] = true;
       }
     }
-    //TODO: Get Legal Moves for Goat for Phase 2
-    // Pass data back to client to await player move
-    res.json({ possibleMoves: possibleMovesArray });
   }
+  //TODO: Get Legal Moves for Goat for Phase 2
+  // Pass data back to client to await player move
+  res.json({ possibleMoves: possibleMovesArray });
+}
 
 export function getTigerLegalMoves(inputBody, res) {
-    const board = inputBody.board;
-    const moves = bfs(JSON.stringify(inputBody.index)) 
-    const moveArrayCopy =  possibleMovesArray.map(row => [...row])
-    for (let i = 0; i < moves.length; i++)
-    {
-      //add capture logic
-      if(board[moves[i][0]][moves[i][1]] == 'G')
-      {
-        moveArrayCopy[moves[i][0]][moves[i][1]] = true;
-      }
-      else if(board[moves[i][0]][moves[i][1]] == '')
-      {
-        moveArrayCopy[moves[i][0]][moves[i][1]] = false;
-      }
-      else
-      {
-        moveArrayCopy[moves[i][0]][moves[i][1]] = true;
-      }
-
-
+  const board = inputBody.board;
+  const moves = bfs(JSON.stringify(inputBody.index));
+  let moveArrayCopy = [
+    [true],
+    [true, true, true, true, true, true],
+    [true, true, true, true, true, true],
+    [true, true, true, true, true, true],
+    [true, true, true, true]
+  ];
+  for (let i = 0; i < moves.length; i++) {
+    //add capture logic
+    if (board[moves[i][0]][moves[i][1]] == "G") {
+      moveArrayCopy[moves[i][0]][moves[i][1]] = true;
+    } else if (board[moves[i][0]][moves[i][1]] == "") {
+      moveArrayCopy[moves[i][0]][moves[i][1]] = false;
+    } else {
+      moveArrayCopy[moves[i][0]][moves[i][1]] = true;
     }
-    res.json({ possibleMoves: moveArrayCopy });
+  }
+  res.json({ possibleMoves: moveArrayCopy });
 }
 // Determine if a goat has been captured, using the previous state
 // Input: Array of integers representing the game board, the index is the location
 // Output: Array of integers representing the game board, with the goat removed, if applicable
 function isAnyGoatCaptured(board) {}
 
-
 // Determine where a goat may move
 // Input: Array of integers representing the game board, the index represents the location
 //     0=unoccupied, 1=goat, 2=tiger
 // Output: Dictionary of where each goat may move
 // Step 3: Add you logic to handle the game
-
-
 
 export function getGoatLegalMovesPhaseOne(inputBody, res) {
   // Check that inputs look good
@@ -132,11 +221,9 @@ export function getGoatLegalMovesPhaseOne(inputBody, res) {
   //Gets Goat Legal Places To Move While in Phase One
   for (let i = 0; i < board.length; i++) {
     for (let j = 0; j < board[i].length; j++) {
-      if (board[i][j] != '') {
+      if (board[i][j] != "") {
         possibleMovesArray[i][j] = true;
-      }
-      else
-      {
+      } else {
         possibleMovesArray[i][j] = false;
       }
     }
@@ -146,25 +233,23 @@ export function getGoatLegalMovesPhaseOne(inputBody, res) {
 
 export function getGoatLegalMovesPhaseTwo(inputBody, res) {
   const board = inputBody.board;
-  const moves = bfs(JSON.stringify(inputBody.index)) 
-  const moveArrayCopy =  possibleMovesArray.map(row => [...row])
-  for (let i = 0; i < moves.length; i++)
-  {
+  const moves = bfs(JSON.stringify(inputBody.index));
+  let moveArrayCopy = [
+    [true],
+    [true, true, true, true, true, true],
+    [true, true, true, true, true, true],
+    [true, true, true, true, true, true],
+    [true, true, true, true]
+  ];
+  for (let i = 0; i < moves.length; i++) {
     //maybe add corner tiger check?
-    if(board[moves[i][0]][moves[i][1]] == 'T')
-    {
+    if (board[moves[i][0]][moves[i][1]] == "T") {
       moveArrayCopy[moves[i][0]][moves[i][1]] = true;
-    }
-    else if(board[moves[i][0]][moves[i][1]] == '')
-    {
+    } else if (board[moves[i][0]][moves[i][1]] == "") {
       moveArrayCopy[moves[i][0]][moves[i][1]] = false;
-    }
-    else
-    {
+    } else {
       moveArrayCopy[moves[i][0]][moves[i][1]] = true;
     }
-
-
   }
   res.json({ possibleMoves: moveArrayCopy });
 }
