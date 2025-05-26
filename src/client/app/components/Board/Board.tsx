@@ -133,6 +133,8 @@ export default function Board(props: any) {
         if(selectedPiece.row == row && selectedPiece.col == col)
         {
           console.log("same piece")
+          setPieceSelected(false)
+          callFindTiger(nextSpot)
         }
         else
         {
@@ -188,19 +190,21 @@ export default function Board(props: any) {
           setPieceSelected(false)
           setSelectedPiece({ row: -1, col: -1 });
           setSpots(updatedBoard)
-        }
 
-        //checks to see if phase one of goats is done
-        if(goatCounter < 15)
-        {
-          callGoatLegalMovesPhaseOne(updatedBoard);
-        }
-        else
-        {
-          callFindGoat(updatedBoard)
-        }
+          //checks to see if phase one of goats is done
+          if(goatCounter < 15)
+            {
+              callGoatLegalMovesPhaseOne(updatedBoard);
+            }
+            else
+            {
+              callFindGoat(updatedBoard)
+            }
+    
+            props.setPlayer(props.player);
+          }
 
-        props.setPlayer(props.player);
+
       }
 
     } 
@@ -229,6 +233,8 @@ export default function Board(props: any) {
         if(selectedPiece.row == row && selectedPiece.col == col)
           {
             console.log("same piece")
+            setPieceSelected(false)
+            callFindGoat(nextSpot)
           }
           else
           {
@@ -283,9 +289,8 @@ export default function Board(props: any) {
             setSelectedPiece({ row: -1, col: -1 });
             setSpots(updatedBoard)
             callFindTiger(updatedBoard);
-          }
-        props.setPlayer(props.player);
-        
+            props.setPlayer(props.player);
+          }        
       }
     }
   }
@@ -294,7 +299,7 @@ export default function Board(props: any) {
     <div className="container">
       <div className="board">
         <div className="turn">
-          <p>{props.player ? "Goat" : "Tiger"}'s turn</p>
+          <p>{props.player ? "Goat" : "Tiger"}'s turn : Phase {goatCounter < 15 ? "One" : "Two"}</p>
         </div>
         <div className="line1"></div>
         <div className="line2"></div>

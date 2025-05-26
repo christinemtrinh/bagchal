@@ -184,6 +184,7 @@ export function findGoat(inputBody, res) {
 export function getTigerLegalMoves(inputBody, res) {
   const board = inputBody.board;
   const moves = bfs(JSON.stringify(inputBody.index));
+  console.log(inputBody.index);
   let moveArrayCopy = [
     [true],
     [true, true, true, true, true, true],
@@ -191,6 +192,7 @@ export function getTigerLegalMoves(inputBody, res) {
     [true, true, true, true, true, true],
     [true, true, true, true]
   ];
+  moveArrayCopy[inputBody.index[0]][inputBody.index[1]] = false
   for (let i = 0; i < moves.length; i++) {
     //add capture logic
     if (board[moves[i][0]][moves[i][1]] == "G") {
@@ -241,6 +243,7 @@ export function getGoatLegalMovesPhaseTwo(inputBody, res) {
     [true, true, true, true, true, true],
     [true, true, true, true]
   ];
+  moveArrayCopy[inputBody.index[0]][inputBody.index[1]] = false
   for (let i = 0; i < moves.length; i++) {
     //maybe add corner tiger check?
     if (board[moves[i][0]][moves[i][1]] == "T") {
