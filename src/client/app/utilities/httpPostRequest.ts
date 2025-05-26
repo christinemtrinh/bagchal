@@ -1,6 +1,6 @@
 // Utility function to make a POST request
 export default async function httpPostRequest<T>(url: string, data: T): Promise<any> {
-  console.log(JSON.stringify(data))
+  console.log(data)
   try {
       const response = await fetch(url, {
         method: 'POST',

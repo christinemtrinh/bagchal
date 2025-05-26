@@ -7,8 +7,11 @@ import Rules from './components/Rules/Rules'
 
 export default function Home() {
   const router = useRouter()
-  const [player, setPlayer] = useState("Goat"); //State to update player/turn text
-
+  const [player, setPlayer] = useState(true); //State to update player/turn text Goat: True, Tiger: False
+  function changePlayer()
+  {
+    setPlayer(!player)
+  }
 
   // Opens page on click
   // const handleClickToUser = async () => {    
@@ -18,8 +21,9 @@ export default function Home() {
   return (
     <div>
       <Rules player={player}/>
-      <Board setPlayer={setPlayer}/>
-      
+      <div style={{position: "relative", top: "55px"}}>
+        <Board setPlayer={changePlayer} player = {player}/>
+      </div>
   </div>
   );
 }
