@@ -28,11 +28,15 @@ const Page = () => {
             console.log("Detect player joined")
           addMessage(msg);
         })
+        socket.on('playerLeft', (msg) => {
+          addMessage(msg);
+        })
 
         // Cleanup functions
         return () => {
             socket.off('gameMove');
             socket.off('playerJoined');
+            socket.off('playerLeft');
         };
     }, []);
 
