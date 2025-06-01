@@ -1,24 +1,37 @@
 const express = require("express");
-const http = require('http');
-const socketIO = require('socket.io');
+const { createServer } = require('node:http');
+const { Server } = require('socket.io');
 const { v4: uuidv4 } = require('uuid');
 const PORT = process.env.PORT || 8080;
 
 const api = require('./api'); 
-const sockImpl = require('./socket')
+const socketImpl = require('./socket')
 
 const app = express();
-const server = http.createServer(app);
-const io = socketIO(server);
+const server = createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",   // allow only your React app
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 
 app.use(express.json()); 
 
 // Endpoint for maintaining client connection
 app.get("/create-room", (req, res) => {
   const roomId = uuidv4();
+  res.set({
+    'Access-Control-Allow-Origin': '*'
+  })
   res.send({roomId});
 });
-io.on('connection', (socket) => socketImpl.estConnection(socket));
+
+io.on('connection', (socket) => {             
+  console.log('New client', socket.id)
+  socketImpl.estConnection(socket);
+});
 
 // Endpoints for handling game state
 app.post("/api/prepareGoatMovePhaseOne", (req, res) => api.getGoatLegalMovesPhaseOne((req.body), res));

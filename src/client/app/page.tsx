@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Board from './components/Board/Board'
 import Rules from './components/Rules/Rules'
-
+import Page from './components/GameSetup/Page'
 
 export default function Home() {
   const router = useRouter()
@@ -13,13 +13,9 @@ export default function Home() {
     setPlayer(!player)
   }
 
-  // Opens page on click
-  // const handleClickToUser = async () => {    
-  //   router.push('/user')
-  // } 
-
   return (
     <div>
+      <Page></Page>
       <Rules player={player}/>
       <div style={{position: "relative", top: "55px"}}>
         <Board setPlayer={changePlayer} player = {player}/>

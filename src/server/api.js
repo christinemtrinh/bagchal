@@ -63,7 +63,6 @@ export function findTiger(inputBody, res) {
       }
     }
   }
-  console.log(possibleMovesArray);
   res.json({ possibleMoves: possibleMovesArray });
 }
 
@@ -85,13 +84,11 @@ export function findGoat(inputBody, res) {
     }
     //TODO: Get Legal Moves for Goat for Phase 2
     // Pass data back to client to await player move
-    console.log(possibleMovesArray);
     res.json({ possibleMoves: possibleMovesArray });
   }
 
 export function getTigerLegalMoves(inputBody, res) {
     const board = inputBody.board;
-    console.log(inputBody)
 }
 // Determine if a goat has been captured, using the previous state
 // Input: Array of integers representing the game board, the index is the location
@@ -125,7 +122,6 @@ export function getGoatLegalMovesPhaseOne(inputBody, res) {
       }
     }
   }
-  console.log(possibleMovesArray);
   res.json({ possibleMoves: possibleMovesArray });
 }
 

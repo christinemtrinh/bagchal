@@ -1,5 +1,4 @@
 export function estConnection(socket) {
-    console.log("New client connected");
 
     // Handle client joining room
     socket.on('joinRoom', (roomId) => {
