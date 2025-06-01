@@ -166,6 +166,7 @@ let directionDict = {
 export function checkCapture(tigerPos, board)
 {
   let validIndex = []
+  let goatIndex = []
   //look through directional dictionary to find tiger position
   for (let line in directionDict)
   {
@@ -185,6 +186,7 @@ export function checkCapture(tigerPos, board)
           if (board[rowG][colG] == "G" && board[rowE][colE] == "") 
           {
             validIndex.push([rowE, colE])
+            goatIndex.push([rowG,colG])
           }
             
         }
@@ -196,12 +198,13 @@ export function checkCapture(tigerPos, board)
           if (board[rowG][colG] == "G" && board[rowE][colE] == "") 
           {
             validIndex.push([rowE, colE])
+            goatIndex.push([rowG,colG])
           }
         }
       }
     }
   }
-  return validIndex
+  return [validIndex,goatIndex]
 }
 
 
@@ -493,4 +496,6 @@ function isTigerCornered(board) {}
 // Checks to see if all three tigers are cornered
 // Input: check legal moves for all three tiger, if all false / None
 // Output: True/False
-function isTigerWin(board) {}
+function isTigerWin(board) {
+  
+}
