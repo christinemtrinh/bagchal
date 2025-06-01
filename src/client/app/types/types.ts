@@ -14,3 +14,11 @@ export interface movePiece {
     finalIndex: [number, number]
 
 }
+
+export interface captureGoat {
+    board: Array<string>;
+    initialIndex: [number, number];
+    finalIndex: [number, number]
+    goatCapturedIndex: [number, number]
+
+}

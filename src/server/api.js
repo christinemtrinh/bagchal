@@ -6,7 +6,6 @@
 //     { 1: [2, 3, 4]
 //       5: [4, 9]
 //     }
-<<<<<<< HEAD
 
 let currentBoard = [
   ["T"],
@@ -46,7 +45,6 @@ let graphDict = {
     [1, 1],
     [1, 3],
     [2, 2],
-    [3,2],
   ],
   "[1,3]": [
     [0, 0],
@@ -149,41 +147,7 @@ let graphDict = {
     [4, 2],
   ],
 };
-=======
-let possibleMovesArray = [
-    [true],
-    [false, false, true, true, false, false],
-    [false, false, false, false, false, false],
-    [false, false, false, false, false, false],
-    [false, false, false, false]
-  ];
-//dictionary of node connections
-let graphDict = 
-{
-  '[0 , 0]': [[1,1],[1,2],[1,3],[1,4]],
-  '[1 , 0]': [[1,1],[2,0]],
-  '[1 , 1]': [[0,0],[1,0],[1,2],[2,1]],
-  '[1,2]': [[0,0], [1,1], [1,3],[2,2]],
-  '[1,3]': [[0,0],[1,4],[1,2],[2,3]],
-  '[1,4]': [[0,0],[1,3],[1,5],[2,4]],
-  '[1,5]': [[1,4],[2,5]],
-  '[2,0]': [[2,1],[3,0],[1,0]],
-  '[2,1]': [[1,1],[2,0],[2,2],[3,1]],
-  '[2,2]': [[1,2], [2,1], [2,3],[3,2]],
-  '[2,3]': [[1,3],[2,4],[2,2],[3,3]],
-  '[2,4]': [[1,4],[2,3],[2,5],[3,4]],
-  '[2,5]': [[2,4],[3,5],[1,5]],
-  '[3,0]': [[3,1],[2,0]],
-  '[3,1]': [[2,1],[3,0],[3,2],[4,0]],
-  '[3,2]': [[2,2], [3,1], [3,3],[4,1]],
-  '[3,3]': [[2,3],[3,4],[3,2],[4,2]],
-  '[3,4]': [[2,4],[3,3],[3,5],[4,3]],
-  '[3,5]': [[3,4],[2,5]],
-  '[4,0]': [[3,1],[4,1]],
-  '[4,1]': [[4,0],[4,2],[3,2]],
-  '[4,2]': [[4,1],[4,3],[3,3]],
-  '[4,3]': [[3,4],[4,2]]
-}
+
 //dictionary of directional connection
 let directionDict = {
   'vert1': [[1,0],[2,0],[3,0]],
@@ -240,7 +204,6 @@ export function checkCapture(tigerPos, board)
   return validIndex
 }
 
->>>>>>> 141228ce9de42a1267eecaba71ef3e8001118f7b
 
 export function bfs(index) {
   if (graphDict[index]) {
@@ -297,18 +260,21 @@ export function getTigerLegalMoves(inputBody, res) {
   let goatsCaptured = []
   moveArrayCopy[inputBody.index[0]][inputBody.index[1]] = false
   for (let i = 0; i < moves.length; i++) {
-
     if (board[moves[i][0]][moves[i][1]] == "G") {
       //add capture logic
       moveArrayCopy[moves[i][0]][moves[i][1]] = true;
-
-
     } else if (board[moves[i][0]][moves[i][1]] == "") {
       moveArrayCopy[moves[i][0]][moves[i][1]] = false;
     } else {
       moveArrayCopy[moves[i][0]][moves[i][1]] = true;
     }
   }
+  let legalCapturedIndexes = checkCapture(inputBody.index, board)
+  for(let i = 0; i < legalCapturedIndexes.length; i++)
+  {
+    moveArrayCopy[legalCapturedIndexes[i][0]][legalCapturedIndexes[i][1]] = false;
+  }
+  console.log(goatsCaptured)
   res.json({ possibleMoves: moveArrayCopy, capturedPiece: goatsCaptured});
 }
 // Determine if a goat has been captured, using the previous state
@@ -377,7 +343,55 @@ export function moveTiger(inputBody, res) {
     }
   });
   currentBoard = updatedBoard
-  console.log(updatedBoard)
+  res.json({ board: updatedBoard })
+}
+
+export function tigerCapterGoat(inputBody, res) {
+  let boardCopy = inputBody.board
+  let initialPos = inputBody.initialIndex
+  let finalPos = inputBody.finalIndex
+  let goatIndexes = inputBody.goatsCapturedIndex
+  let updatedBoard = boardCopy.map((rowMap, rowIndexMap) => {
+    // Check if we are at T0
+    if (initialPos[0] === finalPos[0] && initialPos[0] === rowIndexMap) {
+      if (initialPos[1] > finalPos[1]) {
+        return [
+          ...rowMap.slice(0, finalPos[1]),
+          "T",
+          ...rowMap.slice(finalPos[1] + 1, initialPos[1]),
+          "",
+          ...rowMap.slice(initialPos[1] + 1, rowMap.length),
+        ];
+      } else {
+        return [
+          ...rowMap.slice(0, initialPos[1]),
+          "",
+          ...rowMap.slice(initialPos[1] + 1, finalPos[1]),
+          "T",
+          ...rowMap.slice(finalPos[1] + 1, rowMap.length),
+        ];
+      }
+    } else if (rowIndexMap === finalPos[0]) {
+      // move Tiger to new position
+      return [
+        ...rowMap.slice(0, finalPos[1]),
+        "T",
+        ...rowMap.slice(finalPos[1] + 1, rowMap.length),
+      ];
+    } else if (rowIndexMap === initialPos[0]) {
+      // New board should clear this spot
+      return [
+        ...rowMap.slice(0, initialPos[1]),
+        "",
+        ...rowMap.slice(initialPos[1] + 1, rowMap.length),
+      ];
+      // clear the old Tiger position
+      // Check if we are at T1
+    } else {
+      return rowMap; // leave the rest unchanged
+    }
+  });
+  currentBoard = updatedBoard
   res.json({ board: updatedBoard })
 }
 
@@ -426,7 +440,6 @@ export function moveGoat(inputBody, res) {
     }
   });
   currentBoard = updatedBoard
-  console.log(updatedBoard)
   res.json({ board: updatedBoard })
 }
 

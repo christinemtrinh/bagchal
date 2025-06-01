@@ -4,6 +4,7 @@ import Spot from "./Spot/Spot";
 import { GameState } from "../../types/types";
 import { piece } from "../../types/types";
 import { movePiece } from "../../types/types";
+import { captureGoat } from "../../types/types";
 import httpPostRequest from "../../utilities/httpPostRequest";
 import "./board.css";
 import next from "next";
@@ -27,6 +28,7 @@ export default function Board(props: any) {
   const [goatCounter, setGoatCounter] = useState(0);
   const [selectedPiece, setSelectedPiece] = useState([-1,-1]);
   const [pieceSelected, setPieceSelected] = useState(false);
+  const [capturedGoats, setCapturedGoats] = useState([]);
   //Set useState to set Button to Disabled/Enabled
   const updateDisabledSpots = (locations) => {
     setDisabledSpots(locations);
@@ -102,6 +104,8 @@ export default function Board(props: any) {
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
         updateDisabledSpots(response.possibleMoves);
+        setCapturedGoats(response.capturedGoats);
+
       })
       .catch((error) => console.error("Request failed", error));
   }
@@ -136,6 +140,20 @@ export default function Board(props: any) {
       board: board,
       initialIndex: selectedPiece,
       finalIndex: spot,
+    })
+      // Step 5: Receive the response and determine what player may do
+      .then((response) => {
+        updateBoard(response.board);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+
+  function callTigerCaptureGoat(board, spot, selectedPiece, capturedGoats) {
+    httpPostRequest<captureGoat>("/api/tigerCaptureGoat", {
+      board: board,
+      initialIndex: selectedPiece,
+      finalIndex: spot,
+      goatCapturedIndex: capturedGoats,
     })
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
@@ -179,7 +197,14 @@ export default function Board(props: any) {
         } else {
           // Create updated board after tiger has moved
           // Map through old board (nextSpot), row by row
-          callMoveTiger(nextSpot, [row, col], selectedPiece)
+          if(Math.abs(selectedPiece[0] - row) > 1 || Math.abs(selectedPiece[1] - col) > 1)
+          {
+            callTigerCaptureGoat(nextSpot, [row, col], selectedPiece, capturedGoats)
+          }
+          else
+          {
+            callMoveTiger(nextSpot, [row, col], selectedPiece)
+          }
           setPieceSelected(false);
           setSelectedPiece([-1,-1]);
           props.setPlayer(props.player);
@@ -203,7 +228,7 @@ export default function Board(props: any) {
       }
       //select where to move
       else {
-        if (selectedPiece.row == row && selectedPiece.col == col) {
+        if (selectedPiece[0] == row && selectedPiece[1] == col) {
           console.log("same piece");
           setPieceSelected(false);
           callFindGoat(nextSpot);
