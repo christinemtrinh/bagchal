@@ -30,7 +30,7 @@ app.get("/create-room", (req, res) => {
 
 io.on('connection', (socket) => {             
   console.log('New client', socket.id)
-  socketImpl.estConnection(socket);
+  socketImpl.estConnection(socket, io);
 });
 
 // Endpoints for handling game state

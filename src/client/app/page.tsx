@@ -10,7 +10,7 @@ export default function Home() {
   const router = useRouter()
   const [player, setPlayer] = useState(true); //State to update player/turn text Goat: True, Tiger: False
   const [isOpen, setIsOpen] = useState(true);
-
+  const [roomIsFull, setRoomIsFull] = useState(false);
   function changePlayer()
   {
     setPlayer(!player)
@@ -18,7 +18,9 @@ export default function Home() {
 
   return (
     <div>
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}><Page/></Modal>
+      <Modal isOpen={roomIsFull? true : isOpen} onClose={() => setIsOpen(false)}>
+        {roomIsFull? <h3>Room is full! Please try a different link </h3>: <Page setRoomFull={setRoomIsFull}/>}
+      </Modal>
       <Rules player={player}/>
       <div style={{position: "relative", top: "55px"}}>
         <Board setPlayer={changePlayer} player = {player}/>

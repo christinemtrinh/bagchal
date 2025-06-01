@@ -1,11 +1,22 @@
-export function estConnection(socket) {
+export function estConnection(socket, io) {
 
     const roomsJoined = new Set();
     // Handle client joining room
-    socket.on('joinRoom', (roomId) => {
+    socket.on('joinRoom', async (roomId) => {
+
+        // Connection validation; limit 2 players
+        const clients = await io.in(roomId).allSockets();
+        const numClients = clients.size;
+
+        if (numClients >= 2) {
+            // Room full, reject joining
+            socket.emit('roomFull', `Room ${roomId} is full. Cannot join.`);
+            return;
+        }
+
+        // Else allow join
         socket.join(roomId);
         roomsJoined.add(roomId);
-        console.log(`Socket ${socket.id} joined room ${roomId}`);
       
         // Notify others
         socket.to(roomId).emit('playerJoined', `Player joined room ${roomId}`);

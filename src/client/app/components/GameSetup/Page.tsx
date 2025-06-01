@@ -3,10 +3,10 @@ import { io, Socket } from 'socket.io-client';
 
 const socket: Socket = io('http://localhost:8080', {forceNew: true}); // TODO: Change to correct URL
 
-const Page = () => {
+const Page = (props:any) => {
   const [roomId, setRoomId] = useState<string | null>(null);
-    const [link, setLink] = useState<string | null> (null);
-    const [messages, setMessages] = useState<string[]>([]);
+  const [link, setLink] = useState<string | null> (null);
+  const [messages, setMessages] = useState<string[]>([]);
 
     // Define behavior upon rendering
     useEffect(() => {
@@ -32,11 +32,17 @@ const Page = () => {
           addMessage(msg);
         })
 
+        socket.on('roomFull', (msg) => {
+          props.setRoomFull(msg);
+        })
+
         // Cleanup functions
         return () => {
             socket.off('gameMove');
             socket.off('playerJoined');
             socket.off('playerLeft');
+            socket.off('roomFull');
+
         };
     }, []);
 
