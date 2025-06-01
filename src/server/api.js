@@ -13,7 +13,7 @@ let possibleMovesArray = [
     [false, false, false, false, false, false],
     [false, false, false, false]
   ];
-
+//dictionary of node connections
 let graphDict = 
 {
   '[0 , 0]': [[1,1],[1,2],[1,3],[1,4]],
@@ -40,6 +40,62 @@ let graphDict =
   '[4,2]': [[4,1],[4,3],[3,3]],
   '[4,3]': [[3,4],[4,2]]
 }
+//dictionary of directional connection
+let directionDict = {
+  'vert1': [[1,0],[2,0],[3,0]],
+  'vert2': [[0,0],[1,1],[2,1],[3,1],[4,0]],
+  'vert3': [[0,0],[1,2],[2,2],[3,2],[4,1]],
+  'vert4': [[0,0],[1,3],[2,3],[3,3],[4,2]],
+  'vert5': [[0,0],[1,4],[2,4],[3,4],[4,3]],
+  'vert6': [[1,5],[2,5],[3,5]],
+  'hor1': [[1,0],[1,1],[1,2],[1,3],[1,4],[1,5]],
+  'hor2': [[2,0],[2,1],[2,2],[2,3],[2,4],[2,5]],
+  'hor3': [[3,0],[3,1],[3,2],[3,3],[3,4],[3,5]],
+  'hor4': [[4,0],[4,1],[4,2],[4,3]]
+}
+
+// checks for the valid nodes that a tiger can capture
+export function checkCapture(tigerPos, board)
+{
+  let validIndex = []
+  //look through directional dictionary to find tiger position
+  for (let line in directionDict)
+  {
+      let value = directionDict[line]
+    for (let i = 0; i < value.length; i++) {
+      let [rowT, colT] = value[i]
+      //when it finds the tiger position, it will start checking in the positions around it
+      //to check if capturing is legal
+      if (JSON.stringify(tigerPos) == JSON.stringify([rowT,colT])) 
+      {
+        let currentIndex = i
+        //check if capture is legal in south/east direction
+        if (currentIndex < value.length - 2) 
+        { 
+          let [rowG, colG] = value[currentIndex + 1]
+          let [rowE, colE] = value[currentIndex + 2]
+          if (board[rowG][colG] == "G" && board[rowE][colE] == "") 
+          {
+            validIndex.push([rowE, colE])
+          }
+            
+        }
+        //check if capture is legal in north/west direction
+        if (currentIndex > 1) 
+        {
+          let [rowG, colG] = value[currentIndex - 1]
+          let [rowE, colE] = value[currentIndex - 2]
+          if (board[rowG][colG] == "G" && board[rowE][colE] == "") 
+          {
+            validIndex.push([rowE, colE])
+          }
+        }
+      }
+    }
+  }
+  return validIndex
+}
+
 
 export function bfs(index) {
   if(graphDict[index]) {
