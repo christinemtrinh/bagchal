@@ -6,6 +6,15 @@
 //     { 1: [2, 3, 4]
 //       5: [4, 9]
 //     }
+
+let board = [
+  ["T"],
+  ["", "", "T", "T", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", "", "", ""],
+  ["", "", "", ""],
+]
+
 let possibleMovesArray = [
   [true],
   [false, false, true, true, false, false],
@@ -36,6 +45,7 @@ let graphDict = {
     [1, 1],
     [1, 3],
     [2, 2],
+    [3,2],
   ],
   "[1,3]": [
     [0, 0],
@@ -192,18 +202,22 @@ export function getTigerLegalMoves(inputBody, res) {
     [true, true, true, true, true, true],
     [true, true, true, true]
   ];
+  let goatsCaptured = []
   moveArrayCopy[inputBody.index[0]][inputBody.index[1]] = false
   for (let i = 0; i < moves.length; i++) {
-    //add capture logic
+
     if (board[moves[i][0]][moves[i][1]] == "G") {
+      //add capture logic
       moveArrayCopy[moves[i][0]][moves[i][1]] = true;
+
+
     } else if (board[moves[i][0]][moves[i][1]] == "") {
       moveArrayCopy[moves[i][0]][moves[i][1]] = false;
     } else {
       moveArrayCopy[moves[i][0]][moves[i][1]] = true;
     }
   }
-  res.json({ possibleMoves: moveArrayCopy });
+  res.json({ possibleMoves: moveArrayCopy, capturedPiece: goatsCaptured});
 }
 // Determine if a goat has been captured, using the previous state
 // Input: Array of integers representing the game board, the index is the location
