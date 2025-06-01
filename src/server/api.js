@@ -7,7 +7,7 @@
 //       5: [4, 9]
 //     }
 
-let board = [
+let currentBoard = [
   ["T"],
   ["", "", "T", "T", "", ""],
   ["", "", "", "", "", ""],
@@ -194,7 +194,6 @@ export function findGoat(inputBody, res) {
 export function getTigerLegalMoves(inputBody, res) {
   const board = inputBody.board;
   const moves = bfs(JSON.stringify(inputBody.index));
-  console.log(inputBody.index);
   let moveArrayCopy = [
     [true],
     [true, true, true, true, true, true],
@@ -229,6 +228,114 @@ function isAnyGoatCaptured(board) {}
 //     0=unoccupied, 1=goat, 2=tiger
 // Output: Dictionary of where each goat may move
 // Step 3: Add you logic to handle the game
+
+//Using output given by getGoatLegalMoves, Restrict movement to those spots and get user input to move tiger
+//Input: Tiger to move, Spot to move
+//Output: Final location, initial location
+export function placeGoat(inputBody, res) {
+  let boardCopy = inputBody.board
+  boardCopy[inputBody.index[0]][inputBody.index[1]] = "G"
+  currentBoard = boardCopy
+  res.json({ board: boardCopy })
+}
+
+export function moveTiger(inputBody, res) {
+  let boardCopy = inputBody.board
+  let initialPos = inputBody.initialIndex
+  let finalPos = inputBody.finalIndex
+  let updatedBoard = boardCopy.map((rowMap, rowIndexMap) => {
+    // Check if we are at T0
+    if (initialPos[0] === finalPos[0] && initialPos[0] === rowIndexMap) {
+      if (initialPos[1] > finalPos[1]) {
+        return [
+          ...rowMap.slice(0, finalPos[1]),
+          "T",
+          ...rowMap.slice(finalPos[1] + 1, initialPos[1]),
+          "",
+          ...rowMap.slice(initialPos[1] + 1, rowMap.length),
+        ];
+      } else {
+        return [
+          ...rowMap.slice(0, initialPos[1]),
+          "",
+          ...rowMap.slice(initialPos[1] + 1, finalPos[1]),
+          "T",
+          ...rowMap.slice(finalPos[1] + 1, rowMap.length),
+        ];
+      }
+    } else if (rowIndexMap === finalPos[0]) {
+      // move Tiger to new position
+      return [
+        ...rowMap.slice(0, finalPos[1]),
+        "T",
+        ...rowMap.slice(finalPos[1] + 1, rowMap.length),
+      ];
+    } else if (rowIndexMap === initialPos[0]) {
+      // New board should clear this spot
+      return [
+        ...rowMap.slice(0, initialPos[1]),
+        "",
+        ...rowMap.slice(initialPos[1] + 1, rowMap.length),
+      ];
+      // clear the old Tiger position
+      // Check if we are at T1
+    } else {
+      return rowMap; // leave the rest unchanged
+    }
+  });
+  currentBoard = updatedBoard
+  console.log(updatedBoard)
+  res.json({ board: updatedBoard })
+}
+
+export function moveGoat(inputBody, res) {
+  let boardCopy = inputBody.board
+  let initialPos = inputBody.initialIndex
+  let finalPos = inputBody.finalIndex
+  let updatedBoard = boardCopy.map((rowMap, rowIndexMap) => {
+    // Check if we are at T0
+    if (initialPos[0] === finalPos[0] && initialPos[0] === rowIndexMap) {
+      if (initialPos[1] > finalPos[1]) {
+        return [
+          ...rowMap.slice(0, finalPos[1]),
+          "G",
+          ...rowMap.slice(finalPos[1] + 1, initialPos[1]),
+          "",
+          ...rowMap.slice(initialPos[1] + 1, rowMap.length),
+        ];
+      } else {
+        return [
+          ...rowMap.slice(0, initialPos[1]),
+          "",
+          ...rowMap.slice(initialPos[1] + 1, finalPos[1]),
+          "G",
+          ...rowMap.slice(finalPos[1] + 1, rowMap.length),
+        ];
+      }
+    } else if (rowIndexMap === finalPos[0]) {
+      // move Tiger to new position
+      return [
+        ...rowMap.slice(0, finalPos[1]),
+        "G",
+        ...rowMap.slice(finalPos[1] + 1, rowMap.length),
+      ];
+    } else if (rowIndexMap === initialPos[0]) {
+      // New board should clear this spot
+      return [
+        ...rowMap.slice(0, initialPos[1]),
+        "",
+        ...rowMap.slice(initialPos[1] + 1, rowMap.length),
+      ];
+      // clear the old Tiger position
+      // Check if we are at T1
+    } else {
+      return rowMap; // leave the rest unchanged
+    }
+  });
+  currentBoard = updatedBoard
+  console.log(updatedBoard)
+  res.json({ board: updatedBoard })
+}
 
 export function getGoatLegalMovesPhaseOne(inputBody, res) {
   // Check that inputs look good
@@ -270,10 +377,7 @@ export function getGoatLegalMovesPhaseTwo(inputBody, res) {
   }
   res.json({ possibleMoves: moveArrayCopy });
 }
-//Using output given by getGoatLegalMoves, Restrict movement to those spots and get user input to move tiger
-//Input: Tiger to move, Spot to move
-//Output: Final location, initial location
-function moveGoat(board) {}
+
 
 // Checks to see if tiger is cornered (No legal spots to move)
 // Input: Tiger to check

@@ -7,3 +7,10 @@ export interface piece {
     board: Array<string>;
     index: [number, number];
 }
+
+export interface movePiece {
+    board: Array<string>;
+    initialIndex: [number, number];
+    finalIndex: [number, number]
+
+}

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Spot from "./Spot/Spot";
 import { GameState } from "../../types/types";
 import { piece } from "../../types/types";
+import { movePiece } from "../../types/types";
 import httpPostRequest from "../../utilities/httpPostRequest";
 import "./board.css";
 import next from "next";
@@ -15,6 +16,7 @@ export default function Board(props: any) {
     ["", "", "", "", "", ""],
     ["", "", "", ""],
   ]); //State of currenet game board
+  let boardCopy = spots
   const [disabledSpots, setDisabledSpots] = useState([
     [true],
     [false, false, true, true, false, false],
@@ -23,26 +25,34 @@ export default function Board(props: any) {
     [false, false, false, false],
   ]);
   const [goatCounter, setGoatCounter] = useState(0);
-  const [selectedPiece, setSelectedPiece] = useState({ row: -1, col: -1 });
+  const [selectedPiece, setSelectedPiece] = useState([-1,-1]);
   const [pieceSelected, setPieceSelected] = useState(false);
   //Set useState to set Button to Disabled/Enabled
   const updateDisabledSpots = (locations) => {
     setDisabledSpots(locations);
   };
 
+  const updateBoard = (newBoard) => {
+    setSpots(newBoard);
+  };
+
   //Initialize board and first goat turn
   useEffect(() => {
-    // Step 1: Tell the server whose turn it is and what the game board looks like right now.
-    httpPostRequest<GameState>("/api/prepareGoatMovePhaseOne", {
-      turn: "Goat",
-      board: spots,
-    })
-      // Step 5: Receive the response and determine what player may do
-      .then((response) => {
-        updateDisabledSpots(response.possibleMoves);
-      })
-      .catch((error) => console.error("Request failed", error));
-  }, []);
+      boardCopy = spots
+      if(props.player)
+      {
+        if (goatCounter < 15) {
+          console.log(boardCopy)
+          callGoatLegalMovesPhaseOne(boardCopy);
+        } else {
+          callFindGoat(boardCopy);
+        } 
+      }
+      else
+      {
+        callFindTiger(boardCopy);
+      }
+  }, [spots]);
 
   //Find places to place goat
   function callGoatLegalMovesPhaseOne(board) {
@@ -108,15 +118,53 @@ export default function Board(props: any) {
       .catch((error) => console.error("Request failed", error));
   }
 
+  function callPlaceGoat(board, spot) {
+    httpPostRequest<piece>("/api/placeGoat", {
+      board: board,
+      index: spot,
+    })
+      // Step 5: Receive the response and determine what player may do
+      .then((response) => {
+        boardCopy = response.board
+        updateBoard(response.board);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+
+  function callMoveTiger(board, spot, selectedPiece) {
+    httpPostRequest<movePiece>("/api/moveTiger", {
+      board: board,
+      initialIndex: selectedPiece,
+      finalIndex: spot,
+    })
+      // Step 5: Receive the response and determine what player may do
+      .then((response) => {
+        updateBoard(response.board);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+  
+  function callMoveGoat(board, spot, selectedPiece) {
+    httpPostRequest<movePiece>("/api/moveGoat", {
+      board: board,
+      initialIndex: selectedPiece,
+      finalIndex: spot,
+    })
+      // Step 5: Receive the response and determine what player may do
+      .then((response) => {
+        updateBoard(response.board);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+
   //Handle Button Clicks
   function handleClick(row: number, col: number) {
     const nextSpot = spots.map((row) => [...row]);
-    let updatedBoard;
     // Tiger's turn will have to handle two clicks
     if (!props.player) {
       //select a tiger
       if (!pieceSelected) {
-        setSelectedPiece({ row, col });
+        setSelectedPiece([row, col]);
         setPieceSelected(true);
         callGetTigerLegalMoves(nextSpot, [row, col]);
       }
@@ -124,108 +172,16 @@ export default function Board(props: any) {
       //will need to check if same spot is clicked again to deselect and go back
       else {
         //checks if same piece was clicked (deselects tiger)
-        if (selectedPiece.row == row && selectedPiece.col == col) {
+        if (selectedPiece[0] == row && selectedPiece[1] == col) {
           console.log("same piece");
           setPieceSelected(false);
           callFindTiger(nextSpot);
         } else {
           // Create updated board after tiger has moved
           // Map through old board (nextSpot), row by row
-          updatedBoard = nextSpot.map((rowMap, rowIndexMap) => {
-            //Check if piece is captures
-            if(Math.abs(row - selectedPiece.row) > 1 || Math.abs(col - selectedPiece.col) > 1 )
-            {
-              console.log("piece captured");
-              if (row === selectedPiece.row && row === rowIndexMap) {
-                if (selectedPiece.col > col) {
-                  return [
-                    ...rowMap.slice(0, col),
-                    "T",
-                    ...rowMap.slice(col + 1, selectedPiece.col),
-                    "",
-                    ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
-                  ];
-                //Move Tiger Right
-                } else {
-                  return [
-                    ...rowMap.slice(0, selectedPiece.col),
-                    "",
-                    ...rowMap.slice(selectedPiece.col + 1, col),
-                    "T",
-                    ...rowMap.slice(col + 1, rowMap.length),
-                  ];
-                }
-              }
-              // move Tiger up and down
-              else if (rowIndexMap === row) {
-                return [
-                  ...rowMap.slice(0, col),
-                  "T",
-                  ...rowMap.slice(col + 1, rowMap.length),
-                ];
-              } else if (rowIndexMap === selectedPiece.row) {
-                return [
-                  ...rowMap.slice(0, selectedPiece.col),
-                  "",
-                  ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
-                ];
-              } else {
-                return rowMap; // leave the rest unchanged
-              }
-            }
-            // Check if we are at initial position to clear spot
-            //Move Tiger Left
-            else{
-              if (row === selectedPiece.row && row === rowIndexMap) {
-                if (selectedPiece.col > col) {
-                  return [
-                    ...rowMap.slice(0, col),
-                    "T",
-                    ...rowMap.slice(col + 1, selectedPiece.col),
-                    "",
-                    ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
-                  ];
-                //Move Tiger Right
-                } else {
-                  return [
-                    ...rowMap.slice(0, selectedPiece.col),
-                    "",
-                    ...rowMap.slice(selectedPiece.col + 1, col),
-                    "T",
-                    ...rowMap.slice(col + 1, rowMap.length),
-                  ];
-                }
-              }
-              // move Tiger up and down
-              else if (rowIndexMap === row) {
-                return [
-                  ...rowMap.slice(0, col),
-                  "T",
-                  ...rowMap.slice(col + 1, rowMap.length),
-                ];
-              } else if (rowIndexMap === selectedPiece.row) {
-                return [
-                  ...rowMap.slice(0, selectedPiece.col),
-                  "",
-                  ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
-                ];
-              } else {
-                return rowMap; // leave the rest unchanged
-              }
-            }
-          });
-          console.log(updatedBoard);
+          callMoveTiger(nextSpot, [row, col], selectedPiece)
           setPieceSelected(false);
-          setSelectedPiece({ row: -1, col: -1 });
-          setSpots(updatedBoard);
-
-          //checks to see if phase one of goats is done
-          if (goatCounter < 15) {
-            callGoatLegalMovesPhaseOne(updatedBoard);
-          } else {
-            callFindGoat(updatedBoard);
-          }
-
+          setSelectedPiece([-1,-1]);
           props.setPlayer(props.player);
         }
       }
@@ -234,15 +190,14 @@ export default function Board(props: any) {
     else if (props.player) {
       //place goat
       if (goatCounter < 15) {
-        nextSpot[row][col] = "G";
-        setSpots(nextSpot);
+        callPlaceGoat(nextSpot, [row, col]);
         setGoatCounter(goatCounter + 1);
         callFindTiger(nextSpot);
         props.setPlayer(props.player);
       }
       //select goat
       else if (!pieceSelected) {
-        setSelectedPiece({ row, col });
+        setSelectedPiece([row,col]);
         setPieceSelected(true);
         callGetGoatLegalMovesPhaseTwo(nextSpot, [row, col]);
       }
@@ -255,50 +210,10 @@ export default function Board(props: any) {
         } else {
           // Create updated board after tiger has moved
           // Map through old board (nextSpot), row by row
-          updatedBoard = nextSpot.map((rowMap, rowIndexMap) => {
-            // Check if we are at T0
-            if (row === selectedPiece.row && row === rowIndexMap) {
-              if (selectedPiece.col > col) {
-                return [
-                  ...rowMap.slice(0, col),
-                  "G",
-                  ...rowMap.slice(col + 1, selectedPiece.col),
-                  "",
-                  ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
-                ];
-              } else {
-                return [
-                  ...rowMap.slice(0, selectedPiece.col),
-                  "",
-                  ...rowMap.slice(selectedPiece.col + 1, col),
-                  "G",
-                  ...rowMap.slice(col + 1, rowMap.length),
-                ];
-              }
-            } else if (rowIndexMap === row) {
-              // move Tiger to new position
-              return [
-                ...rowMap.slice(0, col),
-                "G",
-                ...rowMap.slice(col + 1, rowMap.length),
-              ];
-            } else if (rowIndexMap === selectedPiece.row) {
-              // New board should clear this spot
-              return [
-                ...rowMap.slice(0, selectedPiece.col),
-                "",
-                ...rowMap.slice(selectedPiece.col + 1, rowMap.length),
-              ];
-              // clear the old Tiger position
-              // Check if we are at T1
-            } else {
-              return rowMap; // leave the rest unchanged
-            }
-          });
+          callMoveGoat(nextSpot, [row, col], selectedPiece)
           setPieceSelected(false);
-          setSelectedPiece({ row: -1, col: -1 });
-          setSpots(updatedBoard);
-          callFindTiger(updatedBoard);
+          setSelectedPiece([-1,-1]);
+
           props.setPlayer(props.player);
         }
       }
