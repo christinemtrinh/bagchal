@@ -29,6 +29,7 @@ export default function Board(props: any) {
   const [selectedPiece, setSelectedPiece] = useState([-1,-1]);
   const [pieceSelected, setPieceSelected] = useState(false);
   const [capturedGoats, setCapturedGoats] = useState();
+  const [numOfCapturedGoats, setNumOfCapturedGoats] = useState(0);
   //Set useState to set Button to Disabled/Enabled
   const updateDisabledSpots = (locations) => {
     setDisabledSpots(locations);
@@ -196,9 +197,10 @@ export default function Board(props: any) {
           callFindTiger(nextSpot);
         } else {
           // Create updated board after tiger has moved
-          // Map through old board (nextSpot), row by row
+          //checks to see if piece was captured
           if(Math.abs(selectedPiece[0] - row) > 1 || Math.abs(selectedPiece[1] - col) > 1)
           {
+            setNumOfCapturedGoats(numOfCapturedGoats + 1)
             callTigerCaptureGoat(nextSpot, [row, col], selectedPiece, capturedGoats)
           }
           else
@@ -250,9 +252,13 @@ export default function Board(props: any) {
       <div className="board">
         <div className="turn">
           <p>
-            {props.player ? "Goat" : "Tiger"}'s turn : Phase{" "}
-            {goatCounter < 15 ? "One" : "Two"}
+            <br />
+            {props.player ? "Goat" : "Tiger"}'s turn<br />
+            Phase{" "}
+            {goatCounter < 15 ? "One" : "Two"} 
+            : Goats Captured: {numOfCapturedGoats}
           </p>
+
         </div>
         <div className="line1"></div>
         <div className="line2"></div>
