@@ -15,7 +15,7 @@ export default function Board(props: any) {
     ["", "", "T", "T", "", ""],
     ["", "", "", "", "", ""],
     ["", "", "", "", "", ""],
-    ["", "", "", ""],
+    ["", "", "", ""], 
   ]); //State of currenet game board
   let boardCopy = spots
   const [disabledSpots, setDisabledSpots] = useState([
@@ -28,7 +28,7 @@ export default function Board(props: any) {
   const [goatCounter, setGoatCounter] = useState(0);
   const [selectedPiece, setSelectedPiece] = useState([-1,-1]);
   const [pieceSelected, setPieceSelected] = useState(false);
-  const [capturedGoats, setCapturedGoats] = useState([]);
+  const [capturedGoats, setCapturedGoats] = useState();
   //Set useState to set Button to Disabled/Enabled
   const updateDisabledSpots = (locations) => {
     setDisabledSpots(locations);
@@ -104,7 +104,7 @@ export default function Board(props: any) {
       // Step 5: Receive the response and determine what player may do
       .then((response) => {
         updateDisabledSpots(response.possibleMoves);
-        setCapturedGoats(response.capturedGoats);
+        setCapturedGoats(response.capturedGoat);
 
       })
       .catch((error) => console.error("Request failed", error));

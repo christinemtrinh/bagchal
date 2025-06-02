@@ -260,7 +260,6 @@ export function getTigerLegalMoves(inputBody, res) {
     [true, true, true, true, true, true],
     [true, true, true, true]
   ];
-  let goatsCaptured = []
   moveArrayCopy[inputBody.index[0]][inputBody.index[1]] = false
   for (let i = 0; i < moves.length; i++) {
     if (board[moves[i][0]][moves[i][1]] == "G") {
@@ -272,13 +271,12 @@ export function getTigerLegalMoves(inputBody, res) {
       moveArrayCopy[moves[i][0]][moves[i][1]] = true;
     }
   }
-  let legalCapturedIndexes = checkCapture(inputBody.index, board)
+  let [legalCapturedIndexes, goatCapturedIndexes] = checkCapture(inputBody.index, board)
   for(let i = 0; i < legalCapturedIndexes.length; i++)
   {
     moveArrayCopy[legalCapturedIndexes[i][0]][legalCapturedIndexes[i][1]] = false;
   }
-  console.log(goatsCaptured)
-  res.json({ possibleMoves: moveArrayCopy, capturedPiece: goatsCaptured});
+  res.json({ possibleMoves: moveArrayCopy, capturedGoat: goatCapturedIndexes});
 }
 // Determine if a goat has been captured, using the previous state
 // Input: Array of integers representing the game board, the index is the location
@@ -349,11 +347,29 @@ export function moveTiger(inputBody, res) {
   res.json({ board: updatedBoard })
 }
 
-export function tigerCapterGoat(inputBody, res) {
+export function compareIndex(firstIndex, secondIndex)
+{
+  return firstIndex[0] === secondIndex[0] && firstIndex[1] === secondIndex[1];
+}
+
+export function moveTigerCaptureGoat(inputBody, res) {
   let boardCopy = inputBody.board
   let initialPos = inputBody.initialIndex
   let finalPos = inputBody.finalIndex
-  let goatIndexes = inputBody.goatsCapturedIndex
+  let spotsArroundFinalIndex = bfs(JSON.stringify(finalPos));
+  let capturedGoat;
+  let goatIndexes = inputBody.goatCapturedIndex;
+  for(let i = 0; i < spotsArroundFinalIndex.length; i++)
+  {
+    for(let j = 0; j < goatIndexes.length; j++)
+    {
+      if(compareIndex(spotsArroundFinalIndex[i], goatIndexes[j]))
+      {
+        capturedGoat = goatIndexes[j];
+      }
+    }
+  }
+  console.log(capturedGoat)
   let updatedBoard = boardCopy.map((rowMap, rowIndexMap) => {
     // Check if we are at T0
     if (initialPos[0] === finalPos[0] && initialPos[0] === rowIndexMap) {
@@ -394,7 +410,8 @@ export function tigerCapterGoat(inputBody, res) {
       return rowMap; // leave the rest unchanged
     }
   });
-  currentBoard = updatedBoard
+  console.log(updatedBoard)
+  updatedBoard[capturedGoat[0]][capturedGoat[1]] = ""
   res.json({ board: updatedBoard })
 }
 
