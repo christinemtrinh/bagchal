@@ -278,11 +278,6 @@ export function getTigerLegalMoves(inputBody, res) {
   }
   res.json({ possibleMoves: moveArrayCopy, capturedGoat: goatCapturedIndexes});
 }
-// Determine if a goat has been captured, using the previous state
-// Input: Array of integers representing the game board, the index is the location
-// Output: Array of integers representing the game board, with the goat removed, if applicable
-function isAnyGoatCaptured(board) {}
-
 // Determine where a goat may move
 // Input: Array of integers representing the game board, the index represents the location
 //     0=unoccupied, 1=goat, 2=tiger
@@ -303,48 +298,12 @@ export function moveTiger(inputBody, res) {
   let boardCopy = inputBody.board
   let initialPos = inputBody.initialIndex
   let finalPos = inputBody.finalIndex
-  let updatedBoard = boardCopy.map((rowMap, rowIndexMap) => {
-    // Check if we are at T0
-    if (initialPos[0] === finalPos[0] && initialPos[0] === rowIndexMap) {
-      if (initialPos[1] > finalPos[1]) {
-        return [
-          ...rowMap.slice(0, finalPos[1]),
-          "T",
-          ...rowMap.slice(finalPos[1] + 1, initialPos[1]),
-          "",
-          ...rowMap.slice(initialPos[1] + 1, rowMap.length),
-        ];
-      } else {
-        return [
-          ...rowMap.slice(0, initialPos[1]),
-          "",
-          ...rowMap.slice(initialPos[1] + 1, finalPos[1]),
-          "T",
-          ...rowMap.slice(finalPos[1] + 1, rowMap.length),
-        ];
-      }
-    } else if (rowIndexMap === finalPos[0]) {
-      // move Tiger to new position
-      return [
-        ...rowMap.slice(0, finalPos[1]),
-        "T",
-        ...rowMap.slice(finalPos[1] + 1, rowMap.length),
-      ];
-    } else if (rowIndexMap === initialPos[0]) {
-      // New board should clear this spot
-      return [
-        ...rowMap.slice(0, initialPos[1]),
-        "",
-        ...rowMap.slice(initialPos[1] + 1, rowMap.length),
-      ];
-      // clear the old Tiger position
-      // Check if we are at T1
-    } else {
-      return rowMap; // leave the rest unchanged
-    }
-  });
-  currentBoard = updatedBoard
-  res.json({ board: updatedBoard })
+  console.log(initialPos)
+  console.log(finalPos)
+  boardCopy[initialPos[0]][initialPos[1]] = ""
+  boardCopy[finalPos[0]][finalPos[1]] = "T"
+  currentBoard = boardCopy
+  res.json({ board: boardCopy })
 }
 
 export function compareIndex(firstIndex, secondIndex)
@@ -359,6 +318,8 @@ export function moveTigerCaptureGoat(inputBody, res) {
   let spotsArroundFinalIndex = bfs(JSON.stringify(finalPos));
   let capturedGoat;
   let goatIndexes = inputBody.goatCapturedIndex;
+
+  //Find which goat got captured
   for(let i = 0; i < spotsArroundFinalIndex.length; i++)
   {
     for(let j = 0; j < goatIndexes.length; j++)
@@ -369,98 +330,21 @@ export function moveTigerCaptureGoat(inputBody, res) {
       }
     }
   }
-  console.log(capturedGoat)
-  let updatedBoard = boardCopy.map((rowMap, rowIndexMap) => {
-    // Check if we are at T0
-    if (initialPos[0] === finalPos[0] && initialPos[0] === rowIndexMap) {
-      if (initialPos[1] > finalPos[1]) {
-        return [
-          ...rowMap.slice(0, finalPos[1]),
-          "T",
-          ...rowMap.slice(finalPos[1] + 1, initialPos[1]),
-          "",
-          ...rowMap.slice(initialPos[1] + 1, rowMap.length),
-        ];
-      } else {
-        return [
-          ...rowMap.slice(0, initialPos[1]),
-          "",
-          ...rowMap.slice(initialPos[1] + 1, finalPos[1]),
-          "T",
-          ...rowMap.slice(finalPos[1] + 1, rowMap.length),
-        ];
-      }
-    } else if (rowIndexMap === finalPos[0]) {
-      // move Tiger to new position
-      return [
-        ...rowMap.slice(0, finalPos[1]),
-        "T",
-        ...rowMap.slice(finalPos[1] + 1, rowMap.length),
-      ];
-    } else if (rowIndexMap === initialPos[0]) {
-      // New board should clear this spot
-      return [
-        ...rowMap.slice(0, initialPos[1]),
-        "",
-        ...rowMap.slice(initialPos[1] + 1, rowMap.length),
-      ];
-      // clear the old Tiger position
-      // Check if we are at T1
-    } else {
-      return rowMap; // leave the rest unchanged
-    }
-  });
-  console.log(updatedBoard)
-  updatedBoard[capturedGoat[0]][capturedGoat[1]] = ""
-  res.json({ board: updatedBoard })
+  boardCopy[initialPos[0]][initialPos[1]] = ""
+  boardCopy[finalPos[0]][finalPos[1]] = "T"
+  boardCopy[capturedGoat[0]][capturedGoat[1]] = ""
+  res.json({ board: boardCopy })
 }
 
 export function moveGoat(inputBody, res) {
   let boardCopy = inputBody.board
   let initialPos = inputBody.initialIndex
   let finalPos = inputBody.finalIndex
-  let updatedBoard = boardCopy.map((rowMap, rowIndexMap) => {
-    // Check if we are at T0
-    if (initialPos[0] === finalPos[0] && initialPos[0] === rowIndexMap) {
-      if (initialPos[1] > finalPos[1]) {
-        return [
-          ...rowMap.slice(0, finalPos[1]),
-          "G",
-          ...rowMap.slice(finalPos[1] + 1, initialPos[1]),
-          "",
-          ...rowMap.slice(initialPos[1] + 1, rowMap.length),
-        ];
-      } else {
-        return [
-          ...rowMap.slice(0, initialPos[1]),
-          "",
-          ...rowMap.slice(initialPos[1] + 1, finalPos[1]),
-          "G",
-          ...rowMap.slice(finalPos[1] + 1, rowMap.length),
-        ];
-      }
-    } else if (rowIndexMap === finalPos[0]) {
-      // move Tiger to new position
-      return [
-        ...rowMap.slice(0, finalPos[1]),
-        "G",
-        ...rowMap.slice(finalPos[1] + 1, rowMap.length),
-      ];
-    } else if (rowIndexMap === initialPos[0]) {
-      // New board should clear this spot
-      return [
-        ...rowMap.slice(0, initialPos[1]),
-        "",
-        ...rowMap.slice(initialPos[1] + 1, rowMap.length),
-      ];
-      // clear the old Tiger position
-      // Check if we are at T1
-    } else {
-      return rowMap; // leave the rest unchanged
-    }
-  });
-  currentBoard = updatedBoard
-  res.json({ board: updatedBoard })
+
+  boardCopy[initialPos[0]][initialPos[1]] = ""
+  boardCopy[finalPos[0]][finalPos[1]] = "G"
+  currentBoard = boardCopy
+  res.json({ board: boardCopy })
 }
 
 export function getGoatLegalMovesPhaseOne(inputBody, res) {

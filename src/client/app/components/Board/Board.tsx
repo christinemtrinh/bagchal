@@ -30,6 +30,137 @@ export default function Board(props: any) {
   const [pieceSelected, setPieceSelected] = useState(false);
   const [capturedGoats, setCapturedGoats] = useState();
   const [numOfCapturedGoats, setNumOfCapturedGoats] = useState(0);
+
+  const graphDict: {[key: string]: number[][]} = {
+    "[0,0]": [
+      [1, 1],
+      [1, 2],
+      [1, 3],
+      [1, 4],
+    ],
+    "[1,0]": [
+      [1, 1],
+      [2, 0],
+    ],
+    "[1,1]": [
+      [0, 0],
+      [1, 0],
+      [1, 2],
+      [2, 1],
+    ],
+    "[1,2]": [
+      [0, 0],
+      [1, 1],
+      [1, 3],
+      [2, 2],
+    ],
+    "[1,3]": [
+      [0, 0],
+      [1, 4],
+      [1, 2],
+      [2, 3],
+    ],
+    "[1,4]": [
+      [0, 0],
+      [1, 3],
+      [1, 5],
+      [2, 4],
+    ],
+    "[1,5]": [
+      [1, 4],
+      [2, 5],
+    ],
+    "[2,0]": [
+      [2, 1],
+      [3, 0],
+      [1, 0],
+    ],
+    "[2,1]": [
+      [1, 1],
+      [2, 0],
+      [2, 2],
+      [3, 1],
+    ],
+    "[2,2]": [
+      [1, 2],
+      [2, 1],
+      [2, 3],
+      [3, 2],
+    ],
+    "[2,3]": [
+      [1, 3],
+      [2, 4],
+      [2, 2],
+      [3, 3],
+    ],
+    "[2,4]": [
+      [1, 4],
+      [2, 3],
+      [2, 5],
+      [3, 4],
+    ],
+    "[2,5]": [
+      [2, 4],
+      [3, 5],
+      [1, 5],
+    ],
+    "[3,0]": [
+      [3, 1],
+      [2, 0],
+    ],
+    "[3,1]": [
+      [2, 1],
+      [3, 0],
+      [3, 2],
+      [4, 0],
+    ],
+    "[3,2]": [
+      [2, 2],
+      [3, 1],
+      [3, 3],
+      [4, 1],
+    ],
+    "[3,3]": [
+      [2, 3],
+      [3, 4],
+      [3, 2],
+      [4, 2],
+    ],
+    "[3,4]": [
+      [2, 4],
+      [3, 3],
+      [3, 5],
+      [4, 3],
+    ],
+    "[3,5]": [
+      [3, 4],
+      [2, 5],
+    ],
+    "[4,0]": [
+      [3, 1],
+      [4, 1],
+    ],
+    "[4,1]": [
+      [4, 0],
+      [4, 2],
+      [3, 2],
+    ],
+    "[4,2]": [
+      [4, 1],
+      [4, 3],
+      [3, 3],
+    ],
+    "[4,3]": [
+      [3, 4],
+      [4, 2],
+    ],
+  };
+
+  const bfs = (index: number[]) => {
+    const key =  JSON.stringify(index)
+    return graphDict[key]
+
+  }
   //Set useState to set Button to Disabled/Enabled
   const updateDisabledSpots = (locations) => {
     setDisabledSpots(locations);
@@ -176,6 +307,13 @@ export default function Board(props: any) {
       .catch((error) => console.error("Request failed", error));
   }
 
+  //to check if place moved is a capture move
+  const isMoveValid = (prev: number[], current: number[]) => {
+    const possibleMoves = bfs(prev); 
+    return possibleMoves.some(
+      (move) => move[0] === current[0] && move[1] === current[1]
+    );
+  };
   //Handle Button Clicks
   function handleClick(row: number, col: number) {
     const nextSpot = spots.map((row) => [...row]);
@@ -198,13 +336,15 @@ export default function Board(props: any) {
         } else {
           // Create updated board after tiger has moved
           //checks to see if piece was captured
-          if(Math.abs(selectedPiece[0] - row) > 1 || Math.abs(selectedPiece[1] - col) > 1)
+
+          if(!isMoveValid([row, col], selectedPiece))
           {
             setNumOfCapturedGoats(numOfCapturedGoats + 1)
             callTigerCaptureGoat(nextSpot, [row, col], selectedPiece, capturedGoats)
           }
           else
           {
+
             callMoveTiger(nextSpot, [row, col], selectedPiece)
           }
           setPieceSelected(false);
