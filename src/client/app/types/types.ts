@@ -7,3 +7,22 @@ export interface piece {
     board: Array<string>;
     index: [number, number];
 }
+
+export interface movePiece {
+    board: Array<string>;
+    initialIndex: [number, number];
+    finalIndex: [number, number]
+
+}
+
+export interface captureGoat {
+    board: Array<string>;
+    initialIndex: [number, number];
+    finalIndex: [number, number]
+    goatCapturedIndex: [number, number][]
+}
+
+export interface checkTigerCornered {
+    board: Array<string>;
+    tigerIndex: [number, number][]
+}

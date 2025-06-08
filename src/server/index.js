@@ -15,9 +15,15 @@ app.get("/api/test", (req, res) => {
 
 // Step 2: Register the endpoint, /prepareGoatMove on the server. Point it to the function that will contain the logic, getGoatLegalMoves
 app.post("/api/prepareGoatMovePhaseOne", (req, res) => api.getGoatLegalMovesPhaseOne((req.body), res));
+app.post("/api/placeGoat", (req, res) => api.placeGoat((req.body), res));
 app.post("/api/selectGoat", (req, res) => api.findGoat((req.body), res));
 app.post("/api/selectTiger", (req, res) => api.findTiger((req.body), res));
+app.post("/api/moveTiger", (req, res) => api.moveTiger((req.body), res));
+app.post("/api/moveGoat", (req, res) => api.moveGoat((req.body), res));
+app.post("/api/tigerCaptureGoat", (req, res) => api.moveTigerCaptureGoat((req.body), res));
 app.post("/api/getTigerLegalMoves", (req, res) => api.getTigerLegalMoves((req.body), res));
+app.post("/api/getGoatLegalMovesPhaseTwo", (req, res) => api.getGoatLegalMovesPhaseTwo((req.body), res));
+app.post("/api/checkTigerCorner", (req, res) => api.getTigerCornered((req.body), res));
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
