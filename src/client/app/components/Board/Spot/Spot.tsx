@@ -2,8 +2,9 @@ export default function Spot(props:any) {
     const buttonStyle = {
     left: props.y + "%",
     backgroundColor: props.disabled ? "#ccc" : "rgb(213, 213, 213)", 
-    color: props.disabled ? "#666" : "rgb(28, 28, 28)",
+    //color: props.disabled ? "#666" : "rgb(28, 28, 28)",
     cursor: props.disabled ? "not-allowed" : "pointer",
+    color: props.value == "G" ? "#606C38" : "#BC6C25"
   };
       return (
         <button

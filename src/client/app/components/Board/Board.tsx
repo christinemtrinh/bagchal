@@ -427,17 +427,8 @@ export default function Board(props: any) {
 
   return (
     <div className="container">
-      <div className="board">
-        <div className="turn">
-          <p>
-            <br />
-            {props.player ? "Goat" : "Tiger"}'s turn<br />
-            Phase{" "}
-            {goatCounter < 15 ? "One" : "Two"} 
-            : Goats Captured: {numOfCapturedGoats} : Tigers Cornered: {numOfCorneredTigers}
-          </p>
 
-        </div>
+      <div className="board">
         <div className="line1"></div>
         <div className="line2"></div>
         <div className="line3"></div>
