@@ -5,6 +5,7 @@ import { GameState } from "../../types/types";
 import { piece } from "../../types/types";
 import { movePiece } from "../../types/types";
 import { captureGoat } from "../../types/types";
+import { checkTigerCornered } from "../../types/types";
 import httpPostRequest from "../../utilities/httpPostRequest";
 import "./board.css";
 import next from "next";
@@ -30,6 +31,7 @@ export default function Board(props: any) {
   const [pieceSelected, setPieceSelected] = useState(false);
   const [capturedGoats, setCapturedGoats] = useState();
   const [numOfCapturedGoats, setNumOfCapturedGoats] = useState(0);
+  const [numOfCorneredTigers, setNumOfCorneredTigers] = useState(0);
 
   const graphDict: {[key: string]: number[][]} = {
     "[0,0]": [
@@ -175,8 +177,12 @@ export default function Board(props: any) {
       boardCopy = spots
       if(props.player)
       {
-        if (goatCounter < 15) {
-          console.log(boardCopy)
+        callCheckTigerCorner(boardCopy);
+        if(numOfCorneredTigers == 3)
+          {
+            console.log("Goat Won!")
+          }
+        else if (goatCounter < 15) {
           callGoatLegalMovesPhaseOne(boardCopy);
         } else {
           callFindGoat(boardCopy);
@@ -184,7 +190,15 @@ export default function Board(props: any) {
       }
       else
       {
-        callFindTiger(boardCopy);
+
+        if (numOfCapturedGoats === 15)
+        {
+          console.log("Tiger Won!")
+        }
+        else
+        {
+          callFindTiger(boardCopy);
+        }
       }
   }, [spots]);
 
@@ -307,6 +321,17 @@ export default function Board(props: any) {
       .catch((error) => console.error("Request failed", error));
   }
 
+  function callCheckTigerCorner(board) {
+    httpPostRequest<GameState>("/api/checkTigerCorner", {
+      board: board,
+      turn: "Tiger",
+    })
+      .then((response) => {
+        setNumOfCorneredTigers(response.numCornered);
+      })
+      .catch((error) => console.error("Request failed", error));
+  }
+
   //to check if place moved is a capture move
   const isMoveValid = (prev: number[], current: number[]) => {
     const possibleMoves = bfs(prev); 
@@ -320,7 +345,11 @@ export default function Board(props: any) {
     // Tiger's turn will have to handle two clicks
     if (!props.player) {
       //select a tiger
-      if (!pieceSelected) {
+      if(numOfCorneredTigers == 3)
+      {
+        console.log("Goat Wins!")
+      }
+      else if (!pieceSelected) {
         setSelectedPiece([row, col]);
         setPieceSelected(true);
         callGetTigerLegalMoves(nextSpot, [row, col]);
@@ -355,8 +384,12 @@ export default function Board(props: any) {
     }
     //goat turn
     else if (props.player) {
+      if(numOfCapturedGoats == 15)
+      {
+        console.log("Tiger Wins!")
+      }
       //place goat
-      if (goatCounter < 15) {
+      else if (goatCounter < 15) {
         callPlaceGoat(nextSpot, [row, col]);
         setGoatCounter(goatCounter + 1);
         callFindTiger(nextSpot);
@@ -396,7 +429,7 @@ export default function Board(props: any) {
             {props.player ? "Goat" : "Tiger"}'s turn<br />
             Phase{" "}
             {goatCounter < 15 ? "One" : "Two"} 
-            : Goats Captured: {numOfCapturedGoats}
+            : Goats Captured: {numOfCapturedGoats} : Tigers Cornered: {numOfCorneredTigers}
           </p>
 
         </div>

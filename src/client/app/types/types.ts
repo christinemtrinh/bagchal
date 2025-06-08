@@ -21,3 +21,8 @@ export interface captureGoat {
     finalIndex: [number, number]
     goatCapturedIndex: [number, number][]
 }
+
+export interface checkTigerCornered {
+    board: Array<string>;
+    tigerIndex: [number, number][]
+}

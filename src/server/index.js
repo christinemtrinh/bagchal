@@ -23,6 +23,7 @@ app.post("/api/moveGoat", (req, res) => api.moveGoat((req.body), res));
 app.post("/api/tigerCaptureGoat", (req, res) => api.moveTigerCaptureGoat((req.body), res));
 app.post("/api/getTigerLegalMoves", (req, res) => api.getTigerLegalMoves((req.body), res));
 app.post("/api/getGoatLegalMovesPhaseTwo", (req, res) => api.getGoatLegalMovesPhaseTwo((req.body), res));
+app.post("/api/checkTigerCorner", (req, res) => api.getTigerCornered((req.body), res));
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
