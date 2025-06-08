@@ -1,6 +1,19 @@
+import { v4 as uuidv4 } from 'uuid';
+import { calculateElapsedSeconds } from './helpers/calculateElapsedSeconds.js';
+
+// These are global to all connections (server-wide)
+const roomsJoined = new Set();
+const roomTimers = new Map();
+
 export function estConnection(socket, io) {
 
-    const roomsJoined = new Set();
+    socket.on('createRoom', () => {
+        const roomId = uuidv4();
+        socket.join(roomId);
+        roomTimers.set(roomId, Date.now());
+        socket.emit('roomCreated', roomId);
+      });
+
     // Handle client joining room
     socket.on('joinRoom', async (roomId) => {
 
@@ -18,20 +31,35 @@ export function estConnection(socket, io) {
         socket.join(roomId);
         roomsJoined.add(roomId);
       
+        // Get updated player count
+        const clientsAfter = await io.in(roomId).allSockets();
+        const numClientsAfter = clientsAfter.size;
+
         // Notify others
-        socket.to(roomId).emit('playerJoined', `Player joined room ${roomId}`);
-    
+        const timestamp = calculateElapsedSeconds(roomTimers.get(roomId) || Date.now());
+        socket.to(roomId).emit('playerJoined', {msg: 'A challenger approaches!...', timestamp});
+        io.in(roomId).emit('playerCtUpdate', numClientsAfter);
+
         // When a player makes a move
         socket.on('gameMove', ({roomId, move}) => {
-            socket.to(roomId).emit('gameMove', move);
+            const timestamp = calculateElapsedSeconds(roomTimers.get(roomId) || Date.now());
+            io.in(roomId).emit('gameMove', {
+                move,
+                timestamp,
+                senderId: socket.id,  // include sender socket id
+              });
         });
     })
 
     // Handle disconnect
     socket.on('disconnect', (roomId) => {
-        console.log("Running disconnect logic");
-        roomsJoined.forEach((roomId) => {
-            socket.to(roomId).emit('playerLeft', `Player has left the room`);
+        roomsJoined.forEach(async(roomId) => {
+            const timestamp = calculateElapsedSeconds(roomTimers.get(roomId) || Date.now());
+            socket.to(roomId).emit('playerLeft', {msg: 'Your opponent fled!', timestamp});
+            const clients = await io.in(roomId).allSockets();
+        const numClients = clients.size;
+            io.in(roomId).emit('playerCtUpdate', numClients);
+
         })
     })
 }

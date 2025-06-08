@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Board from './components/Board/Board'
 import Rules from './components/Rules/Rules'
-import Page from './components/GameSetup/Page'
+import LobbyMenu from './components/GameSetup/LobbyMenu'
 import Modal from './components/Containers/Modal'
 
 export default function Home() {
@@ -19,7 +19,7 @@ export default function Home() {
   return (
     <div>
       <Modal isOpen={roomIsFull? true : isOpen} onClose={() => setIsOpen(false)}>
-        {roomIsFull? <h3>Room is full! Please try a different link </h3>: <Page setRoomFull={setRoomIsFull}/>}
+        {roomIsFull? <h3>Room is full! Please try a different link </h3>: <LobbyMenu setRoomFull={setRoomIsFull}/>}
       </Modal>
       <Rules player={player}/>
       <div style={{position: "relative", top: "55px"}}>

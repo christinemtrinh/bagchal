@@ -1,7 +1,6 @@
 const express = require("express");
 const { createServer } = require('node:http');
 const { Server } = require('socket.io');
-const { v4: uuidv4 } = require('uuid');
 const PORT = process.env.PORT || 8080;
 
 const api = require('./api'); 
@@ -28,8 +27,7 @@ app.get("/create-room", (req, res) => {
   res.send({roomId});
 });
 
-io.on('connection', (socket) => {             
-  console.log('New client', socket.id)
+io.on('connection', (socket) => {          
   socketImpl.estConnection(socket, io);
 });
 
