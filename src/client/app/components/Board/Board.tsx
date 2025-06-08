@@ -32,6 +32,7 @@ export default function Board(props: any) {
   const [capturedGoats, setCapturedGoats] = useState();
   const [numOfCapturedGoats, setNumOfCapturedGoats] = useState(0);
   const [numOfCorneredTigers, setNumOfCorneredTigers] = useState(0);
+  const [isGameDone, setIsGameDone] = useState(false);
 
   const graphDict: {[key: string]: number[][]} = {
     "[0,0]": [
@@ -175,32 +176,34 @@ export default function Board(props: any) {
   //Initialize board and first goat turn
   useEffect(() => {
       boardCopy = spots
+      callCheckTigerCorner(boardCopy)
       if(props.player)
       {
-        callCheckTigerCorner(boardCopy);
-        if(numOfCorneredTigers == 3)
-          {
-            console.log("Goat Won!")
-          }
-        else if (goatCounter < 15) {
+        if (goatCounter < 15) {
           callGoatLegalMovesPhaseOne(boardCopy);
         } else {
           callFindGoat(boardCopy);
-        } 
+        }
       }
       else
       {
-
-        if (numOfCapturedGoats === 15)
-        {
-          console.log("Tiger Won!")
-        }
-        else
-        {
-          callFindTiger(boardCopy);
-        }
+        callFindTiger(boardCopy);
       }
-  }, [spots]);
+  }, [spots],);
+
+  //watches Num of cornered Tigers
+  useEffect(() => {
+    if (numOfCorneredTigers === 3) {
+      console.log("Goat Wins!");
+    }
+  }, [numOfCorneredTigers]);
+  //wawtches num of captured goats
+  useEffect(() => {
+    if(numOfCapturedGoats === 15)
+      {
+        console.log("Tiger Wins!")
+      }
+  }, [numOfCapturedGoats]);
 
   //Find places to place goat
   function callGoatLegalMovesPhaseOne(board) {
@@ -345,11 +348,7 @@ export default function Board(props: any) {
     // Tiger's turn will have to handle two clicks
     if (!props.player) {
       //select a tiger
-      if(numOfCorneredTigers == 3)
-      {
-        console.log("Goat Wins!")
-      }
-      else if (!pieceSelected) {
+      if (!pieceSelected) {
         setSelectedPiece([row, col]);
         setPieceSelected(true);
         callGetTigerLegalMoves(nextSpot, [row, col]);
@@ -381,15 +380,16 @@ export default function Board(props: any) {
           props.setPlayer(props.player);
         }
       }
+      if(numOfCapturedGoats == 15)
+        {
+          console.log("Tiger Wins!")
+        }
     }
     //goat turn
     else if (props.player) {
-      if(numOfCapturedGoats == 15)
-      {
-        console.log("Tiger Wins!")
-      }
+
       //place goat
-      else if (goatCounter < 15) {
+      if (goatCounter < 15) {
         callPlaceGoat(nextSpot, [row, col]);
         setGoatCounter(goatCounter + 1);
         callFindTiger(nextSpot);
@@ -417,6 +417,11 @@ export default function Board(props: any) {
           props.setPlayer(props.player);
         }
       }
+      callCheckTigerCorner(boardCopy)
+      if(numOfCorneredTigers == 3)
+        {
+          console.log("Goat Wins!")
+        } 
     }
   }
 
