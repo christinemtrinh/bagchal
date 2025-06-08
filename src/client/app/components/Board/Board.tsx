@@ -426,187 +426,194 @@ export default function Board(props: any) {
   }
 
   return (
-    <div className="container">
-
-      <div className="board">
-        <div className="line1"></div>
-        <div className="line2"></div>
-        <div className="line3"></div>
-        <div className="line4"></div>
-        <div className="line5"></div>
-        <div className="line6"></div>
-        <div className="rectangle"></div>
-        <div className="button-container">
-          <div className="row" style={{ margin: "10%", top: "30%" }}>
-            <Spot
-              buttonID="1"
-              disabled={disabledSpots[0][0]}
-              value={spots[0][0]}
-              y={0}
-              onSpotClick={() => handleClick(0, 0)}
-            />
-          </div>
-          <div className="row" style={{ margin: "20%" }}>
-            <Spot
-              buttonID="2"
-              disabled={disabledSpots[1][0]}
-              value={spots[1][0]}
-              y={-97}
-              onSpotClick={() => handleClick(1, 0)}
-            />
-            <Spot
-              buttonID="3"
-              disabled={disabledSpots[1][1]}
-              value={spots[1][1]}
-              y={-42}
-              onSpotClick={() => handleClick(1, 1)}
-            />
-            <Spot
-              buttonID="4"
-              disabled={disabledSpots[1][2]}
-              value={spots[1][2]}
-              y={-12}
-              onSpotClick={() => handleClick(1, 2)}
-            />
-            <Spot
-              buttonID="5"
-              disabled={disabledSpots[1][3]}
-              value={spots[1][3]}
-              y={13}
-              onSpotClick={() => handleClick(1, 3)}
-            />
-            <Spot
-              buttonID="6"
-              disabled={disabledSpots[1][4]}
-              value={spots[1][4]}
-              y={41}
-              onSpotClick={() => handleClick(1, 4)}
-            />
-            <Spot
-              buttonID="7"
-              disabled={disabledSpots[1][5]}
-              value={spots[1][5]}
-              y={101}
-              onSpotClick={() => handleClick(1, 5)}
-            />
-          </div>
-          <div className="row" style={{ margin: "-12%" }}>
-            <Spot
-              buttonID="8"
-              disabled={disabledSpots[2][0]}
-              value={spots[2][0]}
-              y={-97}
-              onSpotClick={() => handleClick(2, 0)}
-            />
-            <Spot
-              buttonID="9"
-              disabled={disabledSpots[2][1]}
-              value={spots[2][1]}
-              y={-67}
-              onSpotClick={() => handleClick(2, 1)}
-            />
-            <Spot
-              buttonID="10"
-              disabled={disabledSpots[2][2]}
-              value={spots[2][2]}
-              y={-20}
-              onSpotClick={() => handleClick(2, 2)}
-            />
-            <Spot
-              buttonID="11"
-              disabled={disabledSpots[2][3]}
-              value={spots[2][3]}
-              y={20}
-              onSpotClick={() => handleClick(2, 3)}
-            />
-            <Spot
-              buttonID="12"
-              disabled={disabledSpots[2][4]}
-              value={spots[2][4]}
-              y={66}
-              onSpotClick={() => handleClick(2, 4)}
-            />
-            <Spot
-              buttonID="13"
-              disabled={disabledSpots[2][5]}
-              value={spots[2][5]}
-              y={101}
-              onSpotClick={() => handleClick(2, 5)}
-            />
-          </div>
-          <div className="row" style={{ margin: "19%" }}>
-            <Spot
-              buttonID="14"
-              disabled={disabledSpots[3][0]}
-              value={spots[3][0]}
-              y={-97}
-              onSpotClick={() => handleClick(3, 0)}
-            />
-            <Spot
-              buttonID="15"
-              disabled={disabledSpots[3][1]}
-              value={spots[3][1]}
-              y={-90}
-              onSpotClick={() => handleClick(3, 1)}
-            />
-            <Spot
-              buttonID="16"
-              disabled={disabledSpots[3][2]}
-              value={spots[3][2]}
-              y={-27}
-              onSpotClick={() => handleClick(3, 2)}
-            />
-            <Spot
-              buttonID="17"
-              disabled={disabledSpots[3][3]}
-              value={spots[3][3]}
-              y={27}
-              onSpotClick={() => handleClick(3, 3)}
-            />
-            <Spot
-              buttonID="18"
-              disabled={disabledSpots[3][4]}
-              value={spots[3][4]}
-              y={90}
-              onSpotClick={() => handleClick(3, 4)}
-            />
-            <Spot
-              buttonID="19"
-              disabled={disabledSpots[3][5]}
-              value={spots[3][5]}
-              y={101}
-              onSpotClick={() => handleClick(3, 5)}
-            />
-          </div>
-          <div className="row" style={{ margin: "-6.5%" }}>
-            <Spot
-              buttonID="20"
-              disabled={disabledSpots[4][0]}
-              value={spots[4][0]}
-              y={-183}
-              onSpotClick={() => handleClick(4, 0)}
-            />
-            <Spot
-              buttonID="21"
-              disabled={disabledSpots[4][1]}
-              value={spots[4][1]}
-              y={-57}
-              onSpotClick={() => handleClick(4, 1)}
-            />
-            <Spot
-              buttonID="22"
-              disabled={disabledSpots[4][2]}
-              value={spots[4][2]}
-              y={55}
-              onSpotClick={() => handleClick(4, 2)}
-            />
-            <Spot
-              buttonID="23"
-              disabled={disabledSpots[4][3]}
-              value={spots[4][3]}
-              y={183}
-              onSpotClick={() => handleClick(4, 3)}
-            />
+    <div>
+      <div className="turn">
+        <p>
+          {props.player ? "Goat" : "Tiger"}'s turn<br />
+          Goats Captured: {numOfCapturedGoats} : Tigers Cornered: {numOfCorneredTigers}
+        </p>
+      </div>
+      <div className="container">
+        <div className="board">
+          <div className="line1"></div>
+          <div className="line2"></div>
+          <div className="line3"></div>
+          <div className="line4"></div>
+          <div className="line5"></div>
+          <div className="line6"></div>
+          <div className="rectangle"></div>
+          <div className="button-container">
+            <div className="row" style={{ margin: "-11%", top: "30%" }}>
+              <Spot
+                buttonID="1"
+                disabled={disabledSpots[0][0]}
+                value={spots[0][0]}
+                y={0}
+                onSpotClick={() => handleClick(0, 0)}
+              />
+            </div>
+            <div className="row" style={{ margin: "38%" }}>
+              <Spot
+                buttonID="2"
+                disabled={disabledSpots[1][0]}
+                value={spots[1][0]}
+                y={-97}
+                onSpotClick={() => handleClick(1, 0)}
+              />
+              <Spot
+                buttonID="3"
+                disabled={disabledSpots[1][1]}
+                value={spots[1][1]}
+                y={-37}
+                onSpotClick={() => handleClick(1, 1)}
+              />
+              <Spot
+                buttonID="4"
+                disabled={disabledSpots[1][2]}
+                value={spots[1][2]}
+                y={-10}
+                onSpotClick={() => handleClick(1, 2)}
+              />
+              <Spot
+                buttonID="5"
+                disabled={disabledSpots[1][3]}
+                value={spots[1][3]}
+                y={10}
+                onSpotClick={() => handleClick(1, 3)}
+              />
+              <Spot
+                buttonID="6"
+                disabled={disabledSpots[1][4]}
+                value={spots[1][4]}
+                y={37}
+                onSpotClick={() => handleClick(1, 4)}
+              />
+              <Spot
+                buttonID="7"
+                disabled={disabledSpots[1][5]}
+                value={spots[1][5]}
+                y={101}
+                onSpotClick={() => handleClick(1, 5)}
+              />
+            </div>
+            <div className="row" style={{ margin: "-28%" }}>
+              <Spot
+                buttonID="8"
+                disabled={disabledSpots[2][0]}
+                value={spots[2][0]}
+                y={-97}
+                onSpotClick={() => handleClick(2, 0)}
+              />
+              <Spot
+                buttonID="9"
+                disabled={disabledSpots[2][1]}
+                value={spots[2][1]}
+                y={-66}
+                onSpotClick={() => handleClick(2, 1)}
+              />
+              <Spot
+                buttonID="10"
+                disabled={disabledSpots[2][2]}
+                value={spots[2][2]}
+                y={-20}
+                onSpotClick={() => handleClick(2, 2)}
+              />
+              <Spot
+                buttonID="11"
+                disabled={disabledSpots[2][3]}
+                value={spots[2][3]}
+                y={20}
+                onSpotClick={() => handleClick(2, 3)}
+              />
+              <Spot
+                buttonID="12"
+                disabled={disabledSpots[2][4]}
+                value={spots[2][4]}
+                y={66}
+                onSpotClick={() => handleClick(2, 4)}
+              />
+              <Spot
+                buttonID="13"
+                disabled={disabledSpots[2][5]}
+                value={spots[2][5]}
+                y={101}
+                onSpotClick={() => handleClick(2, 5)}
+              />
+            </div>
+            <div className="row" style={{ margin: "37%" }}>
+              <Spot
+                buttonID="14"
+                disabled={disabledSpots[3][0]}
+                value={spots[3][0]}
+                y={-97}
+                onSpotClick={() => handleClick(3, 0)}
+              />
+              <Spot
+                buttonID="15"
+                disabled={disabledSpots[3][1]}
+                value={spots[3][1]}
+                y={-93}
+                onSpotClick={() => handleClick(3, 1)}
+              />
+              <Spot
+                buttonID="16"
+                disabled={disabledSpots[3][2]}
+                value={spots[3][2]}
+                y={-28}
+                onSpotClick={() => handleClick(3, 2)}
+              />
+              <Spot
+                buttonID="17"
+                disabled={disabledSpots[3][3]}
+                value={spots[3][3]}
+                y={28}
+                onSpotClick={() => handleClick(3, 3)}
+              />
+              <Spot
+                buttonID="18"
+                disabled={disabledSpots[3][4]}
+                value={spots[3][4]}
+                y={93}
+                onSpotClick={() => handleClick(3, 4)}
+              />
+              <Spot
+                buttonID="19"
+                disabled={disabledSpots[3][5]}
+                value={spots[3][5]}
+                y={101}
+                onSpotClick={() => handleClick(3, 5)}
+              />
+            </div>
+            <div className="row" style={{ margin: "-25.5%" }}>
+              <Spot
+                buttonID="20"
+                disabled={disabledSpots[4][0]}
+                value={spots[4][0]}
+                y={-183}
+                onSpotClick={() => handleClick(4, 0)}
+              />
+              <Spot
+                buttonID="21"
+                disabled={disabledSpots[4][1]}
+                value={spots[4][1]}
+                y={-57}
+                onSpotClick={() => handleClick(4, 1)}
+              />
+              <Spot
+                buttonID="22"
+                disabled={disabledSpots[4][2]}
+                value={spots[4][2]}
+                y={55}
+                onSpotClick={() => handleClick(4, 2)}
+              />
+              <Spot
+                buttonID="23"
+                disabled={disabledSpots[4][3]}
+                value={spots[4][3]}
+                y={183}
+                onSpotClick={() => handleClick(4, 3)}
+              />
+            </div>
           </div>
         </div>
       </div>

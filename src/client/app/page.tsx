@@ -24,12 +24,6 @@ export default function Home() {
     <div>
       <Rules player={player}/>
       <div style={{position: "relative"}}>
-      <div className="turn">
-            <p>
-              {player ? "Goat" : "Tiger"}'s turn<br />
-              Goats Captured: {numOfCapturedGoats} : Tigers Cornered: {numOfCorneredTigers}
-            </p>
-        </div>
         <Board setPlayer={changePlayer} player = {player}/>
       </div>
   </div>
